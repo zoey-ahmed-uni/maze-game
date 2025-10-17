@@ -16,6 +16,7 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private FitViewport viewport;
 
+    private Texture background;
     private Texture playerFrontTexture;
     private Texture playerBackTexture;
     // private Texture playerLeftTexture;
@@ -36,6 +37,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new FitViewport(16, 9);
 
+        background = new Texture("tmp_bg.png");
         playerFrontTexture = new Texture("FrontView.png");
         playerBackTexture = new Texture("BackView.png");
         // playerRightTexture = new Texture("RightView.png");
@@ -107,8 +109,11 @@ public class Main extends ApplicationAdapter {
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
         float playerCenterX = activeSprite.getX() + activeSprite.getWidth() / 2f;
         float playerCenterY = activeSprite.getY() + activeSprite.getHeight() / 2f;
+
         viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
         viewport.getCamera().update();
 
@@ -125,6 +130,7 @@ public class Main extends ApplicationAdapter {
         // playerLeftSprite.setPosition(playerX, playerY);
         // playerRightSprite.setPosition(playerX, playerY);
 
+        batch.draw(background, 0, 0, worldWidth, worldHeight);
         activeSprite.draw(batch);
 
         batch.end();
