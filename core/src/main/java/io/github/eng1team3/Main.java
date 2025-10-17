@@ -101,11 +101,15 @@ public class Main extends ApplicationAdapter {
 
         float playerCenterX = activeSprite.getX() + activeSprite.getWidth() / 2f;
         float playerCenterY = activeSprite.getY() + activeSprite.getHeight() / 2f;
+        viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
+        viewport.getCamera().update();
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
+
         playerX = activeSprite.getX();
         playerY = activeSprite.getY();
+
         batch.begin();
 
         playerFrontSprite.setPosition(playerX, playerY);
@@ -122,5 +126,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         playerFrontTexture.dispose();
+        playerBackTexture.dispose();
     }
 }
