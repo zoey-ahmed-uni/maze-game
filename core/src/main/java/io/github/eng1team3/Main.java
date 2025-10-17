@@ -18,13 +18,13 @@ public class Main extends ApplicationAdapter {
 
     private Texture playerFrontTexture;
     private Texture playerBackTexture;
-    private Texture playerLeftTexture;
-    private Texture playerRightTexture;
+    // private Texture playerLeftTexture;
+    // private Texture playerRightTexture;
 
     private Sprite playerFrontSprite;
     private Sprite playerBackSprite;
-    private Sprite playerLeftSprite;
-    private Sprite playerRightSprite;
+    // private Sprite playerLeftSprite;
+    // private Sprite playerRightSprite;
 
     private Sprite activeSprite;
 
@@ -38,18 +38,26 @@ public class Main extends ApplicationAdapter {
 
         playerFrontTexture = new Texture("FrontView.png");
         playerBackTexture = new Texture("BackView.png");
+        // playerRightTexture = new Texture("RightView.png");
+        // playerLeftTexture = new Texture("LeftView.png");
 
         playerFrontSprite = new Sprite(playerFrontTexture);
         playerBackSprite = new Sprite(playerBackTexture);
+        // playerRightSprite = new Sprite(playerRightTexture);
+        // playerLeftSprite= new Sprite(playerLeftTexture);
 
         playerFrontSprite.setSize(1f, 1f);
         playerBackSprite.setSize(1f, 1f);
+        // playerRightSprite.setSize(1f, 1f);
+        // playerLeftSprite.setSize(1f, 1f);
 
         playerX = viewport.getWorldWidth() / 2f - playerFrontSprite.getWidth() / 2f;
         playerY = viewport.getWorldHeight() / 2f - playerFrontSprite.getHeight() / 2f;
 
         playerFrontSprite.setPosition(playerX, playerY);
         playerBackSprite.setPosition(playerX, playerY);
+        // playerRightSprite.setPosition(playerX, playerY);
+        // playerLeftSprite.setPosition(playerX, playerY);
 
         activeSprite = playerFrontSprite;
     }
@@ -127,5 +135,7 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         playerFrontTexture.dispose();
         playerBackTexture.dispose();
+        // playerRightTexture.dispose();
+        // playerLeftTexture.dispose();
     }
 }
