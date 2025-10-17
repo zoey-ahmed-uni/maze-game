@@ -28,8 +28,8 @@ public class Main extends ApplicationAdapter {
 
     private Sprite activeSprite;
 
-    private float startX;
-    private float startY;
+    private float playerX;
+    private float playerY;
 
     @Override
     public void create() {
@@ -37,15 +37,19 @@ public class Main extends ApplicationAdapter {
         viewport = new FitViewport(16, 9);
 
         playerFrontTexture = new Texture("FrontView.png");
+        playerBackTexture = new Texture("BackView.png");
 
         playerFrontSprite = new Sprite(playerFrontTexture);
+        playerBackSprite = new Sprite(playerBackTexture);
 
         playerFrontSprite.setSize(1f, 1f);
+        playerBackSprite.setSize(1f, 1f);
 
-        startX = viewport.getWorldWidth() / 2f - playerFrontSprite.getWidth() / 2f;
-        startY = viewport.getWorldHeight() / 2f - playerFrontSprite.getHeight() / 2f;
+        playerX = viewport.getWorldWidth() / 2f - playerFrontSprite.getWidth() / 2f;
+        playerY = viewport.getWorldHeight() / 2f - playerFrontSprite.getHeight() / 2f;
 
-        playerFrontSprite.setPosition(startX, startY);
+        playerFrontSprite.setPosition(playerX, playerY);
+        playerBackSprite.setPosition(playerX, playerY);
 
         activeSprite = playerFrontSprite;
     }
@@ -67,13 +71,17 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            // activeSprite = playerRightSprite;
             activeSprite.translateX(speed * delta);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            activeSprite.translateX(-speed * delta); // move the bucket left
+            // activeSprite = playerLeftSprite;
+            activeSprite.translateX(-speed * delta);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            activeSprite.translateY(speed * delta); // move the bucket left
+            activeSprite = playerBackSprite;
+            activeSprite.translateY(speed * delta);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            activeSprite.translateY(-speed * delta); // move the bucket left
+            activeSprite = playerFrontSprite;
+            activeSprite.translateY(-speed * delta);
         }
     }
 
@@ -84,19 +92,28 @@ public class Main extends ApplicationAdapter {
         float playerWidth = activeSprite.getWidth();
         float playerHeight = activeSprite.getHeight();
 
-        playerFrontSprite.setX(MathUtils.clamp(playerFrontSprite.getX(), 0, worldWidth -  playerWidth));
-        playerFrontSprite.setX(MathUtils.clamp(playerFrontSprite.getX(), 0, worldWidth -  playerWidth));
+        activeSprite.setX(MathUtils.clamp(activeSprite.getX(), 0f, worldWidth -  playerWidth));
+        activeSprite.setY(MathUtils.clamp(activeSprite.getY(), 0f, worldHeight -  playerHeight));
     }
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
+
+        float playerCenterX = activeSprite.getX() + activeSprite.getWidth() / 2f;
+        float playerCenterY = activeSprite.getY() + activeSprite.getHeight() / 2f;
+
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
+        playerX = activeSprite.getX();
+        playerY = activeSprite.getY();
         batch.begin();
 
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
-        playerFrontSprite.draw(batch);
+        playerFrontSprite.setPosition(playerX, playerY);
+        playerBackSprite.setPosition(playerX, playerY);
+        // playerLeftSprite.setPosition(playerX, playerY);
+        // playerRightSprite.setPosition(playerX, playerY);
+
+        activeSprite.draw(batch);
 
         batch.end();
     }
