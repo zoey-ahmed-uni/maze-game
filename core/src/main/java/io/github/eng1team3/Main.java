@@ -10,10 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.badlogic.gdx.math.MathUtils;
-
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
+
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -31,7 +32,6 @@ public class Main extends ApplicationAdapter {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
 
-
     private Texture playerFrontTexture;
     private Texture playerBackTexture;
     private Texture playerLeftTexture;
@@ -47,14 +47,13 @@ public class Main extends ApplicationAdapter {
     private float playerX;
     private float playerY;
 
-
+    private MapObjects objects;
 
     @Override
     public void create() {
         String mapFilePath = "map/testTileMap.tmx";
         map = new TmxMapLoader().load(mapFilePath);
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 16, 9);
@@ -87,6 +86,7 @@ public class Main extends ApplicationAdapter {
 
         activeSprite = playerFrontSprite;
 
+        objects = map.getLayers().get("Collision").getObjects();
     }
 
     @Override
@@ -103,46 +103,65 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
-        camera.update();
     }
 
     private void input() {
         float speed = 4f;
         float delta = Gdx.graphics.getDeltaTime();
+        float deltaX = 0;
+        float deltaY = 0;
+        Sprite newActiveSprite = activeSprite;
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            activeSprite = playerRightSprite;
-            activeSprite.translateX(speed * delta);
-
-            camera.translate(speed * delta, 0);
+            newActiveSprite = playerRightSprite;
+            deltaX = speed * delta;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            activeSprite = playerLeftSprite;
-            activeSprite.translateX(-speed * delta);
-
-            camera.translate(-speed * delta, 0);
+            newActiveSprite = playerLeftSprite;
+            deltaX = -speed * delta;
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            activeSprite = playerBackSprite;
-            activeSprite.translateY(speed * delta);
-
-            camera.translate(0, speed * delta);
+            newActiveSprite = playerBackSprite;
+            deltaY = speed * delta;
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            activeSprite = playerFrontSprite;
-            activeSprite.translateY(-speed * delta);
-
-            camera.translate(0, -speed * delta);
+            newActiveSprite = playerFrontSprite;
+            deltaY = -speed * delta;
         }
 
+        if (deltaX != 0 || deltaY != 0) {
+            Rectangle futureHitBox = new Rectangle(
+                activeSprite.getX() + deltaX,
+                activeSprite.getY() + deltaY,
+                1f,
+                1f
+            );
+
+            activeSprite = newActiveSprite;
+            if (!checkCollision(futureHitBox)) {
+                activeSprite.translateX(deltaX);
+                activeSprite.translateY(deltaY);
+                camera.translate(deltaX, deltaY);
+            }
+        }
     }
 
-    private void logic() {
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+    private boolean checkCollision(Rectangle hitBox) {
+        for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = rectangleObject.getRectangle();
 
-        float playerWidth = activeSprite.getWidth();
-        float playerHeight = activeSprite.getHeight();
+            Rectangle scaledRectangle = new Rectangle(
+                rectangle.x / 16f,
+                rectangle.y / 16f,
+                rectangle.width / 16f,
+                rectangle.height / 16f
+            );
 
-
+            if (Intersector.overlaps(scaledRectangle, hitBox)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    private void logic() {}
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
