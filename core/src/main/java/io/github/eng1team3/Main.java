@@ -3,21 +3,12 @@ package io.github.eng1team3;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
-
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -32,20 +23,7 @@ public class Main extends ApplicationAdapter {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
 
-    private Texture playerFrontTexture;
-    private Texture playerBackTexture;
-    private Texture playerLeftTexture;
-    private Texture playerRightTexture;
-
-    private Sprite playerFrontSprite;
-    private Sprite playerBackSprite;
-    private Sprite playerLeftSprite;
-    private Sprite playerRightSprite;
-
-    private Sprite activeSprite;
-
-    private float playerX;
-    private float playerY;
+    private Player player;
 
     private MapObjects objects;
 
@@ -54,6 +32,7 @@ public class Main extends ApplicationAdapter {
         String mapFilePath = "map/testTileMap.tmx";
         map = new TmxMapLoader().load(mapFilePath);
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
+        objects = map.getLayers().get("Collision").getObjects();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 16, 9);
@@ -61,32 +40,15 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new FitViewport(16, 9, camera);
 
-        playerFrontTexture = new Texture("FrontView.png");
-        playerBackTexture = new Texture("BackView.png");
-        playerRightTexture = new Texture("RightView.png");
-        playerLeftTexture = new Texture("LeftView.png");
+        player = new Player();
 
-        playerFrontSprite = new Sprite(playerFrontTexture);
-        playerBackSprite = new Sprite(playerBackTexture);
-        playerRightSprite = new Sprite(playerRightTexture);
-        playerLeftSprite= new Sprite(playerLeftTexture);
+        player.x = viewport.getWorldWidth() / 2f - 1 / 2f;
+        player.y = viewport.getWorldHeight() / 2f - 1 / 2f;
 
-        playerFrontSprite.setSize(1f, 1f);
-        playerBackSprite.setSize(1f, 1f);
-        playerRightSprite.setSize(1f, 1f);
-        playerLeftSprite.setSize(1f, 1f);
-
-        playerX = viewport.getWorldWidth() / 2f - playerFrontSprite.getWidth() / 2f;
-        playerY = viewport.getWorldHeight() / 2f - playerFrontSprite.getHeight() / 2f;
-
-        playerFrontSprite.setPosition(playerX, playerY);
-        playerBackSprite.setPosition(playerX, playerY);
-        playerRightSprite.setPosition(playerX, playerY);
-        playerLeftSprite.setPosition(playerX, playerY);
-
-        activeSprite = playerFrontSprite;
-
-        objects = map.getLayers().get("Collision").getObjects();
+        player.frontSprite.setPosition(player.x, player.y);
+        player.backSprite.setPosition(player.x, player.y);
+        player.rightSprite.setPosition(player.x, player.y);
+        player.leftSprite.setPosition(player.x, player.y);
     }
 
     @Override
@@ -106,59 +68,16 @@ public class Main extends ApplicationAdapter {
     }
 
     private void input() {
-        float speed = 4f;
         float delta = Gdx.graphics.getDeltaTime();
-        float deltaX = 0;
-        float deltaY = 0;
-        Sprite newActiveSprite = activeSprite;
-
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            newActiveSprite = playerRightSprite;
-            deltaX = speed * delta;
+            player.moveRight(delta, objects);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            newActiveSprite = playerLeftSprite;
-            deltaX = -speed * delta;
+            player.moveLeft(delta, objects);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            newActiveSprite = playerBackSprite;
-            deltaY = speed * delta;
+            player.moveUp(delta, objects);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            newActiveSprite = playerFrontSprite;
-            deltaY = -speed * delta;
+            player.moveDown(delta, objects);
         }
-
-        if (deltaX != 0 || deltaY != 0) {
-            Rectangle futureHitBox = new Rectangle(
-                activeSprite.getX() + deltaX,
-                activeSprite.getY() + deltaY,
-                1f,
-                1f
-            );
-
-            activeSprite = newActiveSprite;
-            if (!checkCollision(futureHitBox)) {
-                activeSprite.translateX(deltaX);
-                activeSprite.translateY(deltaY);
-                camera.translate(deltaX, deltaY);
-            }
-        }
-    }
-
-    private boolean checkCollision(Rectangle hitBox) {
-        for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = rectangleObject.getRectangle();
-
-            Rectangle scaledRectangle = new Rectangle(
-                rectangle.x / 16f,
-                rectangle.y / 16f,
-                rectangle.width / 16f,
-                rectangle.height / 16f
-            );
-
-            if (Intersector.overlaps(scaledRectangle, hitBox)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void logic() {}
@@ -169,8 +88,8 @@ public class Main extends ApplicationAdapter {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        float playerCenterX = activeSprite.getX() + activeSprite.getWidth() / 2f;
-        float playerCenterY = activeSprite.getY() + activeSprite.getHeight() / 2f;
+        float playerCenterX = player.activeSprite.getX() + player.activeSprite.getWidth() / 2f;
+        float playerCenterY = player.activeSprite.getY() + player.activeSprite.getHeight() / 2f;
 
         viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
         viewport.getCamera().update();
@@ -178,17 +97,17 @@ public class Main extends ApplicationAdapter {
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
-        playerX = activeSprite.getX();
-        playerY = activeSprite.getY();
+        player.x = player.activeSprite.getX();
+        player.y = player.activeSprite.getY();
 
         batch.begin();
 
-        playerFrontSprite.setPosition(playerX, playerY);
-        playerBackSprite.setPosition(playerX, playerY);
-        playerLeftSprite.setPosition(playerX, playerY);
-        playerRightSprite.setPosition(playerX, playerY);
+        player.frontSprite.setPosition(player.x, player.y);
+        player.backSprite.setPosition(player.x, player.y);
+        player.leftSprite.setPosition(player.x, player.y);
+        player.rightSprite.setPosition(player.x, player.y);
 
-        activeSprite.draw(batch);
+        player.activeSprite.draw(batch);
 
         batch.end();
     }
@@ -196,10 +115,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        playerFrontTexture.dispose();
-        playerBackTexture.dispose();
-        playerRightTexture.dispose();
-        playerLeftTexture.dispose();
+        player.dispose();
 
         map.dispose();
         mapRenderer.dispose();
