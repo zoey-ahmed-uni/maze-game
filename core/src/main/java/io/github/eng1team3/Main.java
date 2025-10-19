@@ -3,20 +3,35 @@ package io.github.eng1team3;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.math.MathUtils;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private FitViewport viewport;
 
-    private Texture background;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
+    private OrthographicCamera camera;
+
+
     private Texture playerFrontTexture;
     private Texture playerBackTexture;
     private Texture playerLeftTexture;
@@ -32,12 +47,21 @@ public class Main extends ApplicationAdapter {
     private float playerX;
     private float playerY;
 
+
+
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        viewport = new FitViewport(16, 9);
+        String mapFilePath = "map/testTileMap.tmx";
+        map = new TmxMapLoader().load(mapFilePath);
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
 
-        background = new Texture("tmp_bg.png");
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 16, 9);
+
+        batch = new SpriteBatch();
+        viewport = new FitViewport(16, 9, camera);
+
         playerFrontTexture = new Texture("FrontView.png");
         playerBackTexture = new Texture("BackView.png");
         playerRightTexture = new Texture("RightView.png");
@@ -62,11 +86,16 @@ public class Main extends ApplicationAdapter {
         playerLeftSprite.setPosition(playerX, playerY);
 
         activeSprite = playerFrontSprite;
+
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+
+        camera.viewportWidth = width;
+        camera.viewportHeight = height;
+        camera.update();
     }
 
     @Override
@@ -74,6 +103,7 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
+        camera.update();
     }
 
     private void input() {
@@ -83,16 +113,25 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             activeSprite = playerRightSprite;
             activeSprite.translateX(speed * delta);
+
+            camera.translate(speed * delta, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             activeSprite = playerLeftSprite;
             activeSprite.translateX(-speed * delta);
+
+            camera.translate(-speed * delta, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             activeSprite = playerBackSprite;
             activeSprite.translateY(speed * delta);
+
+            camera.translate(0, speed * delta);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             activeSprite = playerFrontSprite;
             activeSprite.translateY(-speed * delta);
+
+            camera.translate(0, -speed * delta);
         }
+
     }
 
     private void logic() {
@@ -102,15 +141,15 @@ public class Main extends ApplicationAdapter {
         float playerWidth = activeSprite.getWidth();
         float playerHeight = activeSprite.getHeight();
 
-        activeSprite.setX(MathUtils.clamp(activeSprite.getX(), 0f, worldWidth -  playerWidth));
-        activeSprite.setY(MathUtils.clamp(activeSprite.getY(), 0f, worldHeight -  playerHeight));
+
     }
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+        mapRenderer.setView(camera);
+        mapRenderer.render();
+
         float playerCenterX = activeSprite.getX() + activeSprite.getWidth() / 2f;
         float playerCenterY = activeSprite.getY() + activeSprite.getHeight() / 2f;
 
@@ -130,7 +169,6 @@ public class Main extends ApplicationAdapter {
         playerLeftSprite.setPosition(playerX, playerY);
         playerRightSprite.setPosition(playerX, playerY);
 
-        batch.draw(background, 0, 0, worldWidth, worldHeight);
         activeSprite.draw(batch);
 
         batch.end();
@@ -143,5 +181,8 @@ public class Main extends ApplicationAdapter {
         playerBackTexture.dispose();
         playerRightTexture.dispose();
         playerLeftTexture.dispose();
+
+        map.dispose();
+        mapRenderer.dispose();
     }
 }
