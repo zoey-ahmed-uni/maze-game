@@ -15,10 +15,30 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Main extends Game {
+
+    private SpriteBatch batch;
+
     @Override
     public void create(){
-        setScreen(new GameScreen(this));
+        batch = new SpriteBatch();
+        this.setScreen(new GameScreen(this));
     }
+
+    @Override
+    public void render(){
+        super.render();
+    }
+
+    public SpriteBatch getBatch(){
+        return this.batch;
+    }
+
+    public void setBatch(SpriteBatch batch) {
+        this.batch = batch;
+    }
+
+
+
 
 }
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */

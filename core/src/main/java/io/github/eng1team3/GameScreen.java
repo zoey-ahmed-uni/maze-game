@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class GameScreen implements Screen {
     final Main game;
 
-    private SpriteBatch batch;
     private FitViewport viewport;
 
     private TiledMap map;
@@ -38,8 +37,8 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 16, 9);
 
-        batch = new SpriteBatch();
-        viewport = new FitViewport(16, 9, camera);
+        viewport = new FitViewport(16,9,camera);
+
 
         player = new Player();
 
@@ -116,26 +115,26 @@ public class GameScreen implements Screen {
         viewport.getCamera().update();
 
         viewport.apply();
-        batch.setProjectionMatrix(viewport.getCamera().combined);
+        game.getBatch().setProjectionMatrix(viewport.getCamera().combined);
 
         player.x = player.activeSprite.getX();
         player.y = player.activeSprite.getY();
 
-        batch.begin();
+        game.getBatch().begin();
 
         player.frontSprite.setPosition(player.x, player.y);
         player.backSprite.setPosition(player.x, player.y);
         player.leftSprite.setPosition(player.x, player.y);
         player.rightSprite.setPosition(player.x, player.y);
 
-        player.activeSprite.draw(batch);
+        player.activeSprite.draw(game.getBatch());
 
-        batch.end();
+        game.getBatch().end();
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
+        game.getBatch().dispose();
         player.dispose();
 
         map.dispose();
