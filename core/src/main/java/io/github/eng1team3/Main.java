@@ -1,6 +1,7 @@
 package io.github.eng1team3;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -13,111 +14,31 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
+public class Main extends Game {
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private FitViewport viewport;
-
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    private OrthographicCamera camera;
-
-    private Player player;
-
-    private MapObjects objects;
 
     @Override
-    public void create() {
-        String mapFilePath = "map/testTileMap.tmx";
-        map = new TmxMapLoader().load(mapFilePath);
-        mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-        objects = map.getLayers().get("Collision").getObjects();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 16, 9);
-
+    public void create(){
         batch = new SpriteBatch();
-        viewport = new FitViewport(16, 9, camera);
-
-        player = new Player();
-
-        player.x = viewport.getWorldWidth() / 2f - 1 / 2f;
-        player.y = viewport.getWorldHeight() / 2f - 1 / 2f;
-
-        player.frontSprite.setPosition(player.x, player.y);
-        player.backSprite.setPosition(player.x, player.y);
-        player.rightSprite.setPosition(player.x, player.y);
-        player.leftSprite.setPosition(player.x, player.y);
+        this.setScreen(new GameScreen(this));
     }
 
     @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
-
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+    public void render(){
+        super.render();
     }
 
-    @Override
-    public void render() {
-        input();
-        logic();
-        draw();
+    public SpriteBatch getBatch(){
+        return this.batch;
     }
 
-    private void input() {
-        float delta = Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.moveRight(delta, objects);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.moveLeft(delta, objects);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.moveUp(delta, objects);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.moveDown(delta, objects);
-        }
+    public void setBatch(SpriteBatch batch) {
+        this.batch = batch;
     }
 
-    private void logic() {}
 
-    private void draw() {
-        ScreenUtils.clear(Color.BLACK);
 
-        mapRenderer.setView(camera);
-        mapRenderer.render();
 
-        float playerCenterX = player.activeSprite.getX() + player.activeSprite.getWidth() / 2f;
-        float playerCenterY = player.activeSprite.getY() + player.activeSprite.getHeight() / 2f;
-
-        viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
-        viewport.getCamera().update();
-
-        viewport.apply();
-        batch.setProjectionMatrix(viewport.getCamera().combined);
-
-        player.x = player.activeSprite.getX();
-        player.y = player.activeSprite.getY();
-
-        batch.begin();
-
-        player.frontSprite.setPosition(player.x, player.y);
-        player.backSprite.setPosition(player.x, player.y);
-        player.leftSprite.setPosition(player.x, player.y);
-        player.rightSprite.setPosition(player.x, player.y);
-
-        player.activeSprite.draw(batch);
-
-        batch.end();
-    }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
-        player.dispose();
-
-        map.dispose();
-        mapRenderer.dispose();
-    }
 }
+/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
