@@ -1,8 +1,8 @@
-package io.github.eng1team3.lwjgl3;
+package io.maze.core.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.github.eng1team3.Main;
+import io.maze.core.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

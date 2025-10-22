@@ -1,4 +1,4 @@
-package io.github.eng1team3;
+package io.maze.screens;
 
 import com.badlogic.gdx.Screen;
 
