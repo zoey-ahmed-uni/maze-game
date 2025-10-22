@@ -46,10 +46,7 @@ public class GameScreen implements Screen {
         player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
         player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
+        player.updateSpritePositions();
     }
 
     @Override
@@ -142,10 +139,7 @@ public class GameScreen implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        float playerCenterX = player.getActiveSprite().getX() + player.getActiveSprite().getWidth() / 2f;
-        float playerCenterY = player.getActiveSprite().getY() + player.getActiveSprite().getHeight() / 2f;
-
-        viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
+        viewport.getCamera().position.set(player.getCenterX(), player.getCenterY(), 0);
         viewport.getCamera().update();
 
         viewport.apply();
@@ -156,10 +150,7 @@ public class GameScreen implements Screen {
 
         game.getBatch().begin();
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
+        player.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
 
