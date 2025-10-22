@@ -11,7 +11,7 @@ public abstract class Entity {
 
     float x, y;
 
-    private final float speed;
+    protected float speed;
 
     private float deltaX;
     private float deltaY;
@@ -41,6 +41,21 @@ public abstract class Entity {
 
         deltaX = 0f;
         deltaY = 0f;
+    }
+
+    public void updateSpritePositions(){
+        frontSprite.setPosition(x, y);
+        backSprite.setPosition(x, y);
+        leftSprite.setPosition(x, y);
+        rightSprite.setPosition(x, y);
+    }
+
+    public float getCenterX(){
+        return activeSprite.getX() + activeSprite.getWidth() / 2f;
+    }
+
+    public float getCenterY(){
+        return activeSprite.getY() + activeSprite.getHeight() / 2f;
     }
 
     public float getX() {
@@ -102,6 +117,7 @@ public abstract class Entity {
     public void setDeltaY(float deltaY) {
         this.deltaY = deltaY;
     }
+
 
     public void dispose() {
         frontTexture.dispose();

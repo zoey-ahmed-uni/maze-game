@@ -1,6 +1,7 @@
 package io.maze.screens;
 
 import io.maze.core.CollisionChecker;
+import io.maze.entities.EvilNPC;
 import io.maze.entities.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -28,6 +29,10 @@ public class GameScreen implements Screen {
 
     private final MapObjects mapObjects;
 
+    private final EvilNPC evilnpc;
+
+    private boolean npcMovingOnXAxis;
+
     public GameScreen(final Main game){
         this.game = game;
 
@@ -46,10 +51,16 @@ public class GameScreen implements Screen {
         player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
         player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
+        player.updateSpritePositions();
+
+        evilnpc = new EvilNPC();
+        
+        evilnpc.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
+        evilnpc.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        
+        evilnpc.updateSpritePositions();
+
+        npcMovingOnXAxis = true;
     }
 
     @Override
@@ -134,7 +145,31 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void logic() {}
+    private void logic() {
+        float delta = Gdx.graphics.getDeltaTime();
+        // NPC movement
+        
+        // true if moving right, false if moving left
+        if (npcMovingOnXAxis){
+            evilnpc.setActiveSprite(evilnpc.getRightSprite());
+            evilnpc.setDeltaX(evilnpc.getSpeed() * delta);
+            evilnpc.setDeltaY(0);
+            evilnpc.getActiveSprite().translateX(evilnpc.getDeltaX());
+
+            if (CollisionChecker.isColliding(evilnpc, mapObjects)){
+                npcMovingOnXAxis = false;
+            };
+        } else{
+            evilnpc.setActiveSprite(evilnpc.getLeftSprite());
+            evilnpc.setDeltaX(-evilnpc.getSpeed() * delta);
+            evilnpc.setDeltaY(0);
+            evilnpc.getActiveSprite().translateX(evilnpc.getDeltaX());
+            
+            if (CollisionChecker.isColliding(evilnpc, mapObjects)){
+                npcMovingOnXAxis = true;
+            };
+        }
+    }
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
@@ -142,10 +177,7 @@ public class GameScreen implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        float playerCenterX = player.getActiveSprite().getX() + player.getActiveSprite().getWidth() / 2f;
-        float playerCenterY = player.getActiveSprite().getY() + player.getActiveSprite().getHeight() / 2f;
-
-        viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
+        viewport.getCamera().position.set(player.getCenterX(), player.getCenterY(), 0);
         viewport.getCamera().update();
 
         viewport.apply();
@@ -154,14 +186,17 @@ public class GameScreen implements Screen {
         player.setX(player.getActiveSprite().getX());
         player.setY(player.getActiveSprite().getY());
 
+        evilnpc.setX(evilnpc.getActiveSprite().getX());
+        evilnpc.setY(evilnpc.getActiveSprite().getY());
+
         game.getBatch().begin();
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
+        player.updateSpritePositions();
+        evilnpc.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
+        evilnpc.getActiveSprite().draw(game.getBatch());
+
 
         game.getBatch().end();
     }
