@@ -11,7 +11,7 @@ public abstract class Entity {
 
     float x, y;
 
-    private final float speed;
+    protected float speed;
 
     private float deltaX;
     private float deltaY;
