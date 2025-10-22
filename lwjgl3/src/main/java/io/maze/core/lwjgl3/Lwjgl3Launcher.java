@@ -1,8 +1,8 @@
-package io.github.eng1team3.lwjgl3;
+package io.maze.core.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.github.eng1team3.Main;
+import io.maze.core.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -36,7 +36,7 @@ public class Lwjgl3Launcher {
         //// This should improve compatibility with Windows machines with buggy OpenGL drivers, Macs
         //// with Apple Silicon that have to emulate compatibility with OpenGL anyway, and more.
         //// This uses the dependency `com.badlogicgames.gdx:gdx-lwjgl3-angle` to function.
-        //// You can choose to remove the following line and the mentioned dependency if you want; they
+        //// You can choose to remove the following line and the mentioned dependency if you want;˘ they
         //// are not intended for games that use GL30 (which is compatibility with OpenGL ES 3.0).
         configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES20, 0, 0);
 
