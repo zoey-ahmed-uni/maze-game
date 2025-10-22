@@ -54,10 +54,10 @@ public class GameScreen implements Screen {
         player.updateSpritePositions();
 
         evilnpc = new EvilNPC();
-        
+
         evilnpc.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
         evilnpc.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
-        
+
         evilnpc.updateSpritePositions();
 
         npcMovingOnXAxis = true;
@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
         // NPC movement
-        
+
         // true if moving right, false if moving left
         if (npcMovingOnXAxis){
             evilnpc.setActiveSprite(evilnpc.getRightSprite());
@@ -158,16 +158,16 @@ public class GameScreen implements Screen {
 
             if (CollisionChecker.isColliding(evilnpc, mapObjects)){
                 npcMovingOnXAxis = false;
-            };
+            }
         } else{
             evilnpc.setActiveSprite(evilnpc.getLeftSprite());
             evilnpc.setDeltaX(-evilnpc.getSpeed() * delta);
             evilnpc.setDeltaY(0);
             evilnpc.getActiveSprite().translateX(evilnpc.getDeltaX());
-            
+
             if (CollisionChecker.isColliding(evilnpc, mapObjects)){
                 npcMovingOnXAxis = true;
-            };
+            }
         }
     }
 
