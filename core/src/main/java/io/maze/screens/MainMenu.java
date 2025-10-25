@@ -27,7 +27,6 @@ public class MainMenu implements Screen{
     Texture settingsButtonActive;
     Texture settingsButtonInactive;
 
-
     /**
      * Instantiates a new Main menu.
      *
