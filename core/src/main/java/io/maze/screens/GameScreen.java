@@ -197,7 +197,6 @@ public class GameScreen implements Screen {
         player.getActiveSprite().draw(game.getBatch());
         evilnpc.getActiveSprite().draw(game.getBatch());
 
-
         game.getBatch().end();
     }
 
