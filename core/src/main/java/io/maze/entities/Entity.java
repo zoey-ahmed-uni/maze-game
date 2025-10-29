@@ -2,6 +2,7 @@ package io.maze.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
 public abstract class Entity {
     private final Texture frontTexture, backTexture, leftTexture, rightTexture;
 
@@ -117,7 +118,6 @@ public abstract class Entity {
     public void setDeltaY(float deltaY) {
         this.deltaY = deltaY;
     }
-
 
     public void dispose() {
         frontTexture.dispose();

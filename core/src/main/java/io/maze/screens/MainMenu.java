@@ -37,12 +37,12 @@ public class MainMenu implements Screen{
     public MainMenu(final Main game){
         this.game = game;
         this.viewport = new ExtendViewport(16,9);
-        this.playButtonActive = new Texture("playActive.png");
-        this.playButtonInactive = new Texture("playInactive.png");
-        this.exitButtonActive = new Texture("exitActive.png");
-        this.exitButtonInactive = new Texture("exitInactive.png");
-        this.settingsButtonActive = new Texture("settingsActive.png");
-        this.settingsButtonInactive = new Texture("settingsInactive.png");
+        this.playButtonActive = new Texture("menu/playActive.png");
+        this.playButtonInactive = new Texture("menu/playInactive.png");
+        this.exitButtonActive = new Texture("menu/exitActive.png");
+        this.exitButtonInactive = new Texture("menu/exitInactive.png");
+        this.settingsButtonActive = new Texture("menu/settingsActive.png");
+        this.settingsButtonInactive = new Texture("menu/settingsInactive.png");
     }
 
     @Override

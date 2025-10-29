@@ -1,20 +1,24 @@
 package io.maze.screens;
 
+import com.badlogic.gdx.maps.MapObjects;
 import io.maze.core.CollisionChecker;
-import io.maze.entities.EvilNPC;
+import io.maze.entities.Guard;
 import io.maze.entities.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.maze.core.Main;
+import io.maze.objects.Exam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScreen implements Screen {
     final Main game;
@@ -27,19 +31,25 @@ public class GameScreen implements Screen {
 
     private final Player player;
 
-    private final MapObjects mapObjects;
+    private final MapObjects collisionObjects;
+    private final MapObjects objectObjects;
+    private final MapObjects checkpointObjects;
 
-    private final EvilNPC evilnpc;
+    private final Guard badGuard;
 
-    private boolean npcMovingOnXAxis;
+    private boolean isNpcMovingRight;
+
+    private final Exam exam;
+    private List<String> completedExamNames;
 
     public GameScreen(final Main game){
         this.game = game;
 
-        String mapFilePath = "map/testTileMap.tmx";
-        this.map = new TmxMapLoader().load(mapFilePath);
+        this.map = new TmxMapLoader().load("map/testTileMap.tmx");
         this.mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-        this.mapObjects = map.getLayers().get("Collision").getObjects();
+        this.collisionObjects = map.getLayers().get("Collision").getObjects();
+        this.objectObjects = map.getLayers().get("Objects").getObjects();
+        this.checkpointObjects = map.getLayers().get("Checkpoints").getObjects();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 16, 9);
@@ -50,17 +60,22 @@ public class GameScreen implements Screen {
 
         player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
         player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        player.setSpawnPoint(player.getX(), player.getY());
 
         player.updateSpritePositions();
 
-        evilnpc = new EvilNPC();
+        badGuard = new Guard();
 
-        evilnpc.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        evilnpc.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        badGuard.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
+        badGuard.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
 
-        evilnpc.updateSpritePositions();
+        badGuard.updateSpritePositions();
 
-        npcMovingOnXAxis = true;
+        isNpcMovingRight = true;
+
+        exam = new Exam("test1");
+        exam.setPosition(objectObjects);
+        completedExamNames = new ArrayList<>();
     }
 
     @Override
@@ -109,7 +124,7 @@ public class GameScreen implements Screen {
             player.setDeltaY(player.getSpeed() * delta);
             player.setDeltaX(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateY(player.getDeltaY());
             }
         }
@@ -119,7 +134,7 @@ public class GameScreen implements Screen {
             player.setDeltaY(-player.getSpeed() * delta);
             player.setDeltaX(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateY(player.getDeltaY());
             }
         }
@@ -129,44 +144,60 @@ public class GameScreen implements Screen {
             player.setDeltaX(-player.getSpeed() * delta);
             player.setDeltaY(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateX(player.getDeltaX());
             }
 
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.setActiveSprite(player.getRightSprite());
             player.setDeltaX(player.getSpeed() * delta);
             player.setDeltaY(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateX(player.getDeltaX());
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
+                completedExamNames.add(exam.getName());
+                exam.setCompleted();
             }
         }
     }
 
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        if (CollisionChecker.isColliding(player, checkpointObjects)) {
+            player.setSpawnPoint(player.getX(), player.getY());
+        }
+
+        if (CollisionChecker.isColliding(player, badGuard)) {
+            player.respawn();
+        }
         // NPC movement
 
         // true if moving right, false if moving left
-        if (npcMovingOnXAxis){
-            evilnpc.setActiveSprite(evilnpc.getRightSprite());
-            evilnpc.setDeltaX(evilnpc.getSpeed() * delta);
-            evilnpc.setDeltaY(0);
-            evilnpc.getActiveSprite().translateX(evilnpc.getDeltaX());
+        if (isNpcMovingRight){
+            badGuard.setActiveSprite(badGuard.getRightSprite());
+            badGuard.setDeltaX(badGuard.getSpeed() * delta);
+            badGuard.setDeltaY(0);
+            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
 
-            if (CollisionChecker.isColliding(evilnpc, mapObjects)){
-                npcMovingOnXAxis = false;
+            if (CollisionChecker.isColliding(badGuard, collisionObjects)){
+                isNpcMovingRight = false;
             }
         } else{
-            evilnpc.setActiveSprite(evilnpc.getLeftSprite());
-            evilnpc.setDeltaX(-evilnpc.getSpeed() * delta);
-            evilnpc.setDeltaY(0);
-            evilnpc.getActiveSprite().translateX(evilnpc.getDeltaX());
+            badGuard.setActiveSprite(badGuard.getLeftSprite());
+            badGuard.setDeltaX(-badGuard.getSpeed() * delta);
+            badGuard.setDeltaY(0);
+            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
 
-            if (CollisionChecker.isColliding(evilnpc, mapObjects)){
-                npcMovingOnXAxis = true;
+            if (CollisionChecker.isColliding(badGuard, collisionObjects)){
+                isNpcMovingRight = true;
             }
         }
     }
@@ -186,16 +217,17 @@ public class GameScreen implements Screen {
         player.setX(player.getActiveSprite().getX());
         player.setY(player.getActiveSprite().getY());
 
-        evilnpc.setX(evilnpc.getActiveSprite().getX());
-        evilnpc.setY(evilnpc.getActiveSprite().getY());
+        badGuard.setX(badGuard.getActiveSprite().getX());
+        badGuard.setY(badGuard.getActiveSprite().getY());
 
         game.getBatch().begin();
 
         player.updateSpritePositions();
-        evilnpc.updateSpritePositions();
+        badGuard.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
-        evilnpc.getActiveSprite().draw(game.getBatch());
+        badGuard.getActiveSprite().draw(game.getBatch());
+        exam.getSprite().draw(game.getBatch());
 
         game.getBatch().end();
     }
