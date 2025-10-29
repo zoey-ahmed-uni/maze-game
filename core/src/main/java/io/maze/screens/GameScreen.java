@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
 
     private boolean isMovingUpDown;
 
-    private final List<Exam> exams;
+    private final ArrayList<Exam> exams;
     private List<String> completedExamNames;
 
     public GameScreen(final Main game){
@@ -73,10 +73,19 @@ public class GameScreen implements Screen {
 
         isMovingUpDown = true;
 
-        exams = new ArrayList<Exam>();
-        
-        exams.add(new Exam("test1"));
-        exams.add(new Exam("test2"));
+        exams = new ArrayList<Exam>(){
+            {
+                add(new Exam("test1"));
+                add(new Exam("test2"));
+                add(new Exam("test3"));
+                add(new Exam("test4"));
+                add(new Exam("test5"));
+                add(new Exam("test6"));
+                add(new Exam("test7"));
+                add(new Exam("test8"));
+                add(new Exam("test9"));
+            }
+        };
 
         for (Exam exam: exams){
             exam.setPosition(objectObjects);
