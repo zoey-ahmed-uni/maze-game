@@ -37,9 +37,9 @@ public class GameScreen implements Screen {
 
     private final Guard badGuard;
 
-    private boolean isNpcMovingRight;
+    private boolean isMovingUpDown;
 
-    private final Exam exam;
+    private final ArrayList<Exam> exams;
     private List<String> completedExamNames;
     private Boolean isPaused = false;
 
@@ -60,22 +60,38 @@ public class GameScreen implements Screen {
         player = new Player();
 
         player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        player.setY(viewport.getWorldHeight() - 1f);
         player.setSpawnPoint(player.getX(), player.getY());
 
         player.updateSpritePositions();
 
         badGuard = new Guard();
 
-        badGuard.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        badGuard.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        badGuard.setX(viewport.getWorldWidth() + 14f);
+        badGuard.setY(viewport.getWorldHeight());
 
         badGuard.updateSpritePositions();
 
-        isNpcMovingRight = true;
+        isMovingUpDown = true;
 
-        exam = new Exam("test1");
-        exam.setPosition(objectObjects);
+        exams = new ArrayList<Exam>(){
+            {
+                add(new Exam("test1"));
+                add(new Exam("test2"));
+                add(new Exam("test3"));
+                add(new Exam("test4"));
+                add(new Exam("test5"));
+                add(new Exam("test6"));
+                add(new Exam("test7"));
+                add(new Exam("test8"));
+                add(new Exam("test9"));
+            }
+        };
+
+        for (Exam exam: exams){
+            exam.setPosition(objectObjects);
+        }
+        
         completedExamNames = new ArrayList<>();
     }
 
@@ -174,10 +190,15 @@ public class GameScreen implements Screen {
             }
         }
 
+        
+        
+        
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
-                completedExamNames.add(exam.getName());
-                exam.setCompleted();
+            for (Exam exam: exams){
+                if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
+                    completedExamNames.add(exam.getName());
+                    exam.setCompleted();
+                } 
             }
         }
     }
@@ -193,25 +214,25 @@ public class GameScreen implements Screen {
             player.respawn();
         }
         // NPC movement
-
-        // true if moving right, false if moving left
-        if (isNpcMovingRight){
-            badGuard.setActiveSprite(badGuard.getRightSprite());
-            badGuard.setDeltaX(badGuard.getSpeed() * delta);
-            badGuard.setDeltaY(0);
-            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
+        // true if moving up, false if moving down
+        if (isMovingUpDown){
+            badGuard.setActiveSprite(badGuard.getBackSprite());
+            badGuard.setDeltaY(badGuard.getSpeed() * delta);
+            badGuard.setDeltaX(0);
+            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
 
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
-                isNpcMovingRight = false;
+                isMovingUpDown = false;
             }
+
         } else{
-            badGuard.setActiveSprite(badGuard.getLeftSprite());
-            badGuard.setDeltaX(-badGuard.getSpeed() * delta);
-            badGuard.setDeltaY(0);
-            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
+            badGuard.setActiveSprite(badGuard.getFrontSprite());
+            badGuard.setDeltaY(-badGuard.getSpeed() * delta);
+            badGuard.setDeltaX(0);
+            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
 
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
-                isNpcMovingRight = true;
+                isMovingUpDown = true;
             }
         }
     }
@@ -241,8 +262,11 @@ public class GameScreen implements Screen {
 
         player.getActiveSprite().draw(game.getBatch());
         badGuard.getActiveSprite().draw(game.getBatch());
-        exam.getSprite().draw(game.getBatch());
-
+        
+        for (Exam exam: exams){
+            exam.getSprite().draw(game.getBatch());
+        }
+        
         game.getBatch().end();
     }
 
