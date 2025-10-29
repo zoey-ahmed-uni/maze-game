@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
         player = new Player();
 
         player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        player.setY(viewport.getWorldHeight() - 1f);
         player.setSpawnPoint(player.getX(), player.getY());
 
         player.updateSpritePositions();
@@ -199,7 +199,7 @@ public class GameScreen implements Screen {
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
                 isMovingUpDown = true;
             }
-        } 
+        }
     }
 
     private void draw() {
