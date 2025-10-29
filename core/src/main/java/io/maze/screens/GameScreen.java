@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
 
     private boolean isMovingUpDown;
 
-    private final Exam exam;
+    private final List<Exam> exams;
     private List<String> completedExamNames;
 
     public GameScreen(final Main game){
@@ -73,8 +73,15 @@ public class GameScreen implements Screen {
 
         isMovingUpDown = true;
 
-        exam = new Exam("test1");
-        exam.setPosition(objectObjects);
+        exams = new ArrayList<Exam>();
+        
+        exams.add(new Exam("test1"));
+        exams.add(new Exam("test2"));
+
+        for (Exam exam: exams){
+            exam.setPosition(objectObjects);
+        }
+        
         completedExamNames = new ArrayList<>();
     }
 
@@ -160,10 +167,15 @@ public class GameScreen implements Screen {
             }
         }
 
+        
+        
+        
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
-                completedExamNames.add(exam.getName());
-                exam.setCompleted();
+            for (Exam exam: exams){
+                if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
+                    completedExamNames.add(exam.getName());
+                    exam.setCompleted();
+                } 
             }
         }
     }
@@ -227,8 +239,11 @@ public class GameScreen implements Screen {
 
         player.getActiveSprite().draw(game.getBatch());
         badGuard.getActiveSprite().draw(game.getBatch());
-        exam.getSprite().draw(game.getBatch());
-
+        
+        for (Exam exam: exams){
+            exam.getSprite().draw(game.getBatch());
+        }
+        
         game.getBatch().end();
     }
 
