@@ -41,6 +41,7 @@ public class GameScreen implements Screen {
 
     private final Exam exam;
     private List<String> completedExamNames;
+    private Boolean isPaused = false;
 
     public GameScreen(final Main game){
         this.game = game;
@@ -78,6 +79,12 @@ public class GameScreen implements Screen {
         completedExamNames = new ArrayList<>();
     }
 
+    public void unPause(){
+        this.isPaused = false;
+    }
+
+
+
     @Override
     public void show(){
 
@@ -94,7 +101,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        this.isPaused = true;
     }
 
     @Override
@@ -109,6 +116,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        // Press ESC to pause
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            isPaused = true;
+            game.setScreen(new PauseScreen(game, this)); // pass current screen
+            return; // don’t update game logic this frame
+        }
+
         input();
         logic();
         draw();
@@ -234,9 +248,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.getBatch().dispose();
+        //game.getBatch().dispose();
         player.dispose();
-
         map.dispose();
         mapRenderer.dispose();
     }
