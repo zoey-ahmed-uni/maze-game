@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
     private final Guard badGuard;
 
-    private boolean isNpcMovingRight;
+    private boolean isMovingUpDown;
 
     private final Exam exam;
     private List<String> completedExamNames;
@@ -66,12 +66,12 @@ public class GameScreen implements Screen {
 
         badGuard = new Guard();
 
-        badGuard.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        badGuard.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        badGuard.setX(viewport.getWorldWidth() + 14f);
+        badGuard.setY(viewport.getWorldHeight());
 
         badGuard.updateSpritePositions();
 
-        isNpcMovingRight = true;
+        isMovingUpDown = true;
 
         exam = new Exam("test1");
         exam.setPosition(objectObjects);
@@ -179,27 +179,27 @@ public class GameScreen implements Screen {
             player.respawn();
         }
         // NPC movement
-
-        // true if moving right, false if moving left
-        if (isNpcMovingRight){
-            badGuard.setActiveSprite(badGuard.getRightSprite());
-            badGuard.setDeltaX(badGuard.getSpeed() * delta);
-            badGuard.setDeltaY(0);
-            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
+        // true if moving up, false if moving down
+        if (isMovingUpDown){
+            badGuard.setActiveSprite(badGuard.getBackSprite());
+            badGuard.setDeltaY(badGuard.getSpeed() * delta);
+            badGuard.setDeltaX(0);
+            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
 
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
-                isNpcMovingRight = false;
+                isMovingUpDown = false;
             }
+
         } else{
-            badGuard.setActiveSprite(badGuard.getLeftSprite());
-            badGuard.setDeltaX(-badGuard.getSpeed() * delta);
-            badGuard.setDeltaY(0);
-            badGuard.getActiveSprite().translateX(badGuard.getDeltaX());
+            badGuard.setActiveSprite(badGuard.getFrontSprite());
+            badGuard.setDeltaY(-badGuard.getSpeed() * delta);
+            badGuard.setDeltaX(0);
+            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
 
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
-                isNpcMovingRight = true;
+                isMovingUpDown = true;
             }
-        }
+        } 
     }
 
     private void draw() {
