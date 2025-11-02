@@ -42,6 +42,8 @@ public class GameScreen implements Screen {
     private final ArrayList<Exam> exams;
     private List<String> completedExamNames;
 
+    private int score;
+
     public GameScreen(final Main game){
         this.game = game;
 
@@ -90,8 +92,10 @@ public class GameScreen implements Screen {
         for (Exam exam: exams){
             exam.setPosition(objectObjects);
         }
-        
+
         completedExamNames = new ArrayList<>();
+
+        score = 0;
     }
 
     @Override
@@ -176,15 +180,13 @@ public class GameScreen implements Screen {
             }
         }
 
-        
-        
-        
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            for (Exam exam: exams){
-                if (CollisionChecker.isColliding(player, objectObjects) && !exam.isCompleted()) {
-                    completedExamNames.add(exam.getName());
+            for (Exam exam: exams) {
+                if (CollisionChecker.CurrentObject(player, objectObjects).equals(exam.getName())) {
                     exam.setCompleted();
-                } 
+                    score++;
+                    completedExamNames.add(exam.getName());
+                }
             }
         }
     }
@@ -248,11 +250,11 @@ public class GameScreen implements Screen {
 
         player.getActiveSprite().draw(game.getBatch());
         badGuard.getActiveSprite().draw(game.getBatch());
-        
+
         for (Exam exam: exams){
             exam.getSprite().draw(game.getBatch());
         }
-        
+
         game.getBatch().end();
     }
 

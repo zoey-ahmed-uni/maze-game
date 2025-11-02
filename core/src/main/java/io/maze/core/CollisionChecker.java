@@ -86,4 +86,30 @@ public class CollisionChecker {
         return Intersector.overlaps(playerHitbox, entityHitbox);
     }
 
+    public static String CurrentObject(Player player, MapObjects mapObjects) {
+        Rectangle playerHitbox = new Rectangle(
+            player.getActiveSprite().getX(),
+            player.getActiveSprite().getY(),
+            1f,
+            1f
+        );
+
+        for (RectangleMapObject mapObject : mapObjects.getByType(RectangleMapObject.class)) {
+
+            Rectangle object = mapObject.getRectangle();
+
+            Rectangle scaledObject = new Rectangle(
+                object.x / 16f,
+                object.y / 16f,
+                object.width / 16f,
+                object.height / 16f
+            );
+
+            if (Intersector.overlaps(scaledObject, playerHitbox)) {
+                return mapObject.getName();
+            }
+        }
+        return null;
+    }
+
 }
