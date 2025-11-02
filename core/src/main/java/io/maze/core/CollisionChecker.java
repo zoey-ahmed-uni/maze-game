@@ -86,7 +86,7 @@ public class CollisionChecker {
         return Intersector.overlaps(playerHitbox, entityHitbox);
     }
 
-    public static String CurrentObject(Player player, MapObjects mapObjects) {
+    public static String getCurrentObjectName(Player player, MapObjects mapObjects) {
         Rectangle playerHitbox = new Rectangle(
             player.getActiveSprite().getX(),
             player.getActiveSprite().getY(),

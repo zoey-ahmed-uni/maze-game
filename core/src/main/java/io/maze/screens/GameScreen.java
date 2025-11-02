@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             for (Exam exam: exams) {
-                if (CollisionChecker.CurrentObject(player, objectObjects).equals(exam.getName())) {
+                if (CollisionChecker.getCurrentObjectName(player, objectObjects).equals(exam.getName())) {
                     exam.setCompleted();
                     score++;
                     completedExamNames.add(exam.getName());
