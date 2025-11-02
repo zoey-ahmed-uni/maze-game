@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
 
         isMovingUpDown = true;
 
-        exams = new ArrayList<Exam>(){
+        exams = new ArrayList<>(){
             {
                 add(new Exam("test1"));
                 add(new Exam("test2"));
