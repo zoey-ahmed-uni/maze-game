@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
             }
         };
 
-        for (Exam exam: exams){
+        for (Exam exam: exams) {
             exam.setPosition(objectObjects);
         }
 
@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             for (Exam exam: exams) {
-                if (CollisionChecker.getCurrentObjectName(player, objectObjects).equals(exam.getName())) {
+                if (CollisionChecker.isColliding(player, exam) && !exam.isCompleted()) {
                     exam.setCompleted();
                     score++;
                     completedExamNames.add(exam.getName());

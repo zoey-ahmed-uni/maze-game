@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import io.maze.entities.Player;
+import io.maze.objects.Object;
 import java.util.List;
 
 public class CollisionChecker {
@@ -86,7 +87,7 @@ public class CollisionChecker {
         return Intersector.overlaps(playerHitbox, entityHitbox);
     }
 
-    public static String getCurrentObjectName(Player player, MapObjects mapObjects) {
+    public static boolean isColliding(Player player, Object object) {
         Rectangle playerHitbox = new Rectangle(
             player.getActiveSprite().getX(),
             player.getActiveSprite().getY(),
@@ -94,22 +95,13 @@ public class CollisionChecker {
             1f
         );
 
-        for (RectangleMapObject mapObject : mapObjects.getByType(RectangleMapObject.class)) {
+        Rectangle objectHitbox = new Rectangle(
+            object.getSprite().getX(),
+            object.getSprite().getY(),
+            1f,
+            1f
+        );
 
-            Rectangle object = mapObject.getRectangle();
-
-            Rectangle scaledObject = new Rectangle(
-                object.x / 16f,
-                object.y / 16f,
-                object.width / 16f,
-                object.height / 16f
-            );
-
-            if (Intersector.overlaps(scaledObject, playerHitbox)) {
-                return mapObject.getName();
-            }
-        }
-        return "";
+        return Intersector.overlaps(playerHitbox, objectHitbox);
     }
-
 }
