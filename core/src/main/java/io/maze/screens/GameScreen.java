@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.maze.core.Main;
 import io.maze.objects.Exam;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,11 @@ public class GameScreen implements Screen {
     private List<String> completedExamNames;
 
     private int score;
+
+    private final FitViewport hudViewport;
+    private final OrthographicCamera hudCamera;
+    private final BitmapFont font;
+    private float timeLeft;
 
     public GameScreen(final Main game){
         this.game = game;
@@ -96,6 +102,15 @@ public class GameScreen implements Screen {
         completedExamNames = new ArrayList<>();
 
         score = 0;
+
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, 16, 9);
+        hudViewport = new FitViewport(16,9,hudCamera);
+        font = new BitmapFont();
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(0.03f);
+
+        timeLeft = 300f;
     }
 
     @Override
@@ -106,10 +121,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        hudViewport.update(width, height, true);
     }
 
     @Override
@@ -213,7 +225,7 @@ public class GameScreen implements Screen {
                 isMovingUpDown = false;
             }
 
-        } else{
+        } else {
             badGuard.setActiveSprite(badGuard.getFrontSprite());
             badGuard.setDeltaY(-badGuard.getSpeed() * delta);
             badGuard.setDeltaX(0);
@@ -222,6 +234,13 @@ public class GameScreen implements Screen {
             if (CollisionChecker.isColliding(badGuard, collisionObjects)){
                 isMovingUpDown = true;
             }
+        }
+
+        if (timeLeft > 0) {
+            timeLeft -= delta;
+        } else {
+            score += timeLeft;
+            // Transition to Game Over screen
         }
     }
 
@@ -256,6 +275,13 @@ public class GameScreen implements Screen {
         }
 
         game.getBatch().end();
+
+        hudViewport.apply();
+        game.getBatch().setProjectionMatrix(hudCamera.combined);
+        game.getBatch().begin();
+        font.draw(game.getBatch(), "Score: " + score, 1f, 8f);
+        font.draw(game.getBatch(), "Time Left: " + (int)timeLeft + "s", 12f, 8f);
+        game.getBatch().end();
     }
 
     @Override
@@ -265,5 +291,10 @@ public class GameScreen implements Screen {
 
         map.dispose();
         mapRenderer.dispose();
+        badGuard.dispose();
+        for (Exam exam: exams){
+            exam.dispose();
+        }
+        font.dispose();
     }
 }
