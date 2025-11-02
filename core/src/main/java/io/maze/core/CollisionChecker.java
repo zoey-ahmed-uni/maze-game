@@ -109,7 +109,7 @@ public class CollisionChecker {
                 return mapObject.getName();
             }
         }
-        return null;
+        return "";
     }
 
 }
