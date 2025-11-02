@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="138">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="147">
  <tileset firstgid="1" source="ground.tsx"/>
  <imagelayer id="3" name="Image Layer 1">
   <image source="tmp_bg_small.png" width="640" height="480"/>
@@ -39,7 +39,7 @@
 </data>
  </layer>
  <objectgroup id="6" name="Checkpoints">
-  <object id="21" x="192.217" y="417.115" width="36.5513" height="14.4055"/>
+  <object id="138" name="check1" x="437.834" y="268.494" width="18.5169" height="23.8927"/>
  </objectgroup>
  <objectgroup id="4" name="Collision">
   <object id="16" x="388.866" y="236.049" height="0.682221"/>
@@ -95,6 +95,14 @@
   <object id="121" x="318.773" y="354" width="46.8636" height="12.8182"/>
   <object id="123" x="114.25" y="354.5" width="204.5" height="58.1137"/>
   <object id="126" x="115" y="256.333" width="33" height="77.125"/>
+  <object id="139" name="test2" x="49.9432" y="172.162" width="10.151" height="23.9565"/>
+  <object id="140" name="test9" x="181.877" y="441.1" width="19.7411" height="30.7443"/>
+  <object id="141" name="test8" x="363.365" y="383.747" width="26.2991" height="10.7388"/>
+  <object id="142" name="test4" x="326.139" y="219.148" width="18.8157" height="29.1459"/>
+  <object id="143" name="test5" x="363.003" y="264.962" width="30.1664" height="4.02219"/>
+  <object id="144" name="test6" x="578.796" y="186.385" width="14.6266" height="32.5964"/>
+  <object id="145" name="test3" x="579.631" y="9.19387" width="7.10435" height="30.5069"/>
+  <object id="146" name="test1" x="487.16" y="416.79" width="34.8148" height="6.91358"/>
  </objectgroup>
  <objectgroup id="5" name="Objects">
   <object id="19" name="test9" type="test" x="169.151" y="455.327"/>
