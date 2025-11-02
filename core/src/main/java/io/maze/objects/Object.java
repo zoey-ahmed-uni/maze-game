@@ -6,12 +6,13 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 
 public abstract class Object {
+    private final Texture texture;
     private final Sprite sprite;
     private final String name;
 
     public Object(String name, String texturePath) {
         this.name = name;
-        Texture texture = new Texture(texturePath);
+        this.texture = new Texture(texturePath);
         this.sprite = new Sprite(texture);
         this.sprite.setSize(1f, 1f);
     }
@@ -30,5 +31,9 @@ public abstract class Object {
 
     public String getName() {
         return name;
+    }
+
+    public void dispose() {
+       texture.dispose();
     }
 }
