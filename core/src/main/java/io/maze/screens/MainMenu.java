@@ -132,7 +132,7 @@ public class MainMenu implements Screen{
             //on the play button
             if (isHoveringPlay) {
                 //change the screen to the game
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new TutorialScreen(game,this));
                 dispose();
             }
             //on the settings button
