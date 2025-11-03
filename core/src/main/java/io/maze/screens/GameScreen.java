@@ -210,7 +210,7 @@ public class GameScreen implements Screen {
             for (Exam exam: exams) {
                 if (CollisionChecker.isColliding(player, exam) && !exam.isCompleted()) {
                     exam.setCompleted();
-                    score++;
+                    score+=100;
                     completedExamNames.add(exam.getName());
                 }
             }
@@ -226,6 +226,7 @@ public class GameScreen implements Screen {
 
         if (CollisionChecker.isColliding(player, badGuard)) {
             player.respawn();
+            score-=10;
         }
         // NPC movement
         // true if moving up, false if moving down
