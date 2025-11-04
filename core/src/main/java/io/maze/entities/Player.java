@@ -12,8 +12,10 @@ public class Player extends Entity {
             "player/left.png"
         );
 
-        spawnX = 0f;
-        spawnY = 0f;
+        this.setX(14.5f);
+        this.setY(14f);
+        updateSpritePositions();
+        this.setSpawnPoint(this.getX(), this.getY());
     }
 
     public void setSpawnPoint(float x, float y){

@@ -54,29 +54,24 @@ public class GameScreen implements Screen {
     public GameScreen(final Main game){
         this.game = game;
 
-        this.map = new TmxMapLoader().load("map/testTileMap.tmx");
+        this.map = new TmxMapLoader().load("map/map.tmx");
         this.mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-        this.collisionObjects = map.getLayers().get("Collision").getObjects();
-        this.objectObjects = map.getLayers().get("Objects").getObjects();
-        this.checkpointObjects = map.getLayers().get("Checkpoints").getObjects();
+        this.collisionObjects = map.getLayers().get("collisions").getObjects();
+        this.objectObjects = map.getLayers().get("objects").getObjects();
+        this.checkpointObjects = map.getLayers().get("checkpoints").getObjects();
 
         camera = new OrthographicCamera();
+        camera.zoom = 0.5f;
         camera.setToOrtho(false, 16, 9);
 
         viewport = new FitViewport(16,9,camera);
 
         player = new Player();
 
-        player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        player.setY(viewport.getWorldHeight() - 1f);
-        player.setSpawnPoint(player.getX(), player.getY());
-
-        player.updateSpritePositions();
-
         badGuard = new Guard();
 
-        badGuard.setX(viewport.getWorldWidth() + 14f);
-        badGuard.setY(viewport.getWorldHeight());
+        badGuard.setX(13f);
+        badGuard.setY(24.5f);
 
         badGuard.updateSpritePositions();
 
@@ -84,15 +79,6 @@ public class GameScreen implements Screen {
 
         exams = new ArrayList<>(){
             {
-                add(new Exam("test1"));
-                add(new Exam("test2"));
-                add(new Exam("test3"));
-                add(new Exam("test4"));
-                add(new Exam("test5"));
-                add(new Exam("test6"));
-                add(new Exam("test7"));
-                add(new Exam("test8"));
-                add(new Exam("test9"));
             }
         };
 
@@ -219,6 +205,8 @@ public class GameScreen implements Screen {
 
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
 
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
             player.setSpawnPoint(player.getX(), player.getY());
