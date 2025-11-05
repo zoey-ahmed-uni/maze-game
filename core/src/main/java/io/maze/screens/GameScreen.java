@@ -262,7 +262,7 @@ public class GameScreen implements Screen {
         if (timeLeft > 0) {
             timeLeft -= delta;
         } else {
-            score += timeLeft;
+            score += (int)timeLeft;
             // Transition to Game Over screen
         }
     }
