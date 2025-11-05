@@ -260,8 +260,6 @@ public class GameScreen implements Screen {
 
         float delta = Gdx.graphics.getDeltaTime();
 
-        System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
-
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
             player.setSpawnPoint(player.getX(), player.getY());
         }
