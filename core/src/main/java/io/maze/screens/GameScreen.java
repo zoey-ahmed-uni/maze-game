@@ -35,13 +35,9 @@ public class GameScreen implements Screen {
     private final MapObjects collisionObjects;
     private final MapObjects objectObjects;
     private final MapObjects checkpointObjects;
+    private final MapObjects finishObjects;
 
-    private final Guard badGuard1;
-    private final Guard badGuard2;
-    private final Guard badGuard3;
     private ArrayList<Guard> guards;
-
-    private boolean isMovingUpDown;
 
     private final ArrayList<Exam> exams;
     private List<String> completedExamNames;
@@ -59,9 +55,11 @@ public class GameScreen implements Screen {
 
         this.map = new TmxMapLoader().load("map/map.tmx");
         this.mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
+
         this.collisionObjects = map.getLayers().get("collisions").getObjects();
         this.objectObjects = map.getLayers().get("objects").getObjects();
         this.checkpointObjects = map.getLayers().get("checkpoints").getObjects();
+        this.finishObjects = map.getLayers().get("finish").getObjects();
 
         camera = new OrthographicCamera();
         camera.zoom = 0.5f;
@@ -71,16 +69,18 @@ public class GameScreen implements Screen {
 
         player = new Player();
 
-        guards = new ArrayList<>();
-
-        badGuard1 = new Guard(13f, 24.5f);
-        badGuard2 = new Guard(11f, 24.5f);
-        badGuard3 = new Guard(9f, 24.5f);
-
-        isMovingUpDown = true;
+        guards = new ArrayList<>() {
+            {
+                add(new Guard(13f, 24.5f, false));
+                add(new Guard(11f, 23f, false));
+                add(new Guard(9f, 21.5f, false));
+                add(new Guard(11f, 21.5f, true));
+            }
+        };
 
         exams = new ArrayList<>(){
             {
+                add(new Exam("exam1"));
             }
         };
 
@@ -206,6 +206,7 @@ public class GameScreen implements Screen {
     }
 
     private void logic() {
+
         float delta = Gdx.graphics.getDeltaTime();
 
         System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
@@ -214,30 +215,47 @@ public class GameScreen implements Screen {
             player.setSpawnPoint(player.getX(), player.getY());
         }
 
-        if (CollisionChecker.isColliding(player, badGuard1)) {
-            player.respawn();
-            score-=10;
+        if (CollisionChecker.isColliding(player, finishObjects)) {
+            // Transition to Game Win screen
+        }
+
+        for (Guard guard : guards) {
+            if (CollisionChecker.isColliding(player, guard)) {
+                player.respawn();
+                score-=10;
+            }
         }
         // NPC movement
         // true if moving up, false if moving down
-        if (isMovingUpDown){
-            badGuard1.setActiveSprite(badGuard1.getBackSprite());
-            badGuard1.setDeltaY(badGuard1.getSpeed() * delta);
-            badGuard1.setDeltaX(0);
-            badGuard1.getActiveSprite().translateY(badGuard1.getDeltaY());
+        for (Guard guard : guards) {
+            if (guard.isMovingHorizontally()) {
+                if (guard.getSpeed() < 0) {
+                    guard.setActiveSprite(guard.getLeftSprite());
+                } else {
+                    guard.setActiveSprite(guard.getRightSprite());
+                }
 
-            if (CollisionChecker.isColliding(badGuard1, collisionObjects)){
-                isMovingUpDown = false;
-            }
+                guard.setDeltaX(guard.getSpeed() * delta);
+                guard.setDeltaY(0);
+                guard.getActiveSprite().translateX(guard.getDeltaX());
 
-        } else {
-            badGuard1.setActiveSprite(badGuard1.getFrontSprite());
-            badGuard1.setDeltaY(-badGuard1.getSpeed() * delta);
-            badGuard1.setDeltaX(0);
-            badGuard1.getActiveSprite().translateY(badGuard1.getDeltaY());
+                if (CollisionChecker.isColliding(guard, collisionObjects)){
+                    guard.setSpeed(-guard.getSpeed());
+                }
+            } else {
+                if (guard.getSpeed() < 0) {
+                    guard.setActiveSprite(guard.getFrontSprite());
+                } else {
+                    guard.setActiveSprite(guard.getBackSprite());
+                }
 
-            if (CollisionChecker.isColliding(badGuard1, collisionObjects)){
-                isMovingUpDown = true;
+                guard.setDeltaY(guard.getSpeed() * delta);
+                guard.setDeltaX(0);
+                guard.getActiveSprite().translateY(guard.getDeltaY());
+
+                if (CollisionChecker.isColliding(guard, collisionObjects)){
+                    guard.setSpeed(-guard.getSpeed());
+                }
             }
         }
 
@@ -264,16 +282,18 @@ public class GameScreen implements Screen {
         player.setX(player.getActiveSprite().getX());
         player.setY(player.getActiveSprite().getY());
 
-        badGuard1.setX(badGuard1.getActiveSprite().getX());
-        badGuard1.setY(badGuard1.getActiveSprite().getY());
-
         game.getBatch().begin();
 
         player.updateSpritePositions();
-        badGuard1.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
-        badGuard1.getActiveSprite().draw(game.getBatch());
+
+        for (Guard guard : guards) {
+            guard.setX(guard.getActiveSprite().getX());
+            guard.setY(guard.getActiveSprite().getY());
+            guard.updateSpritePositions();
+            guard.getActiveSprite().draw(game.getBatch());
+        }
 
         for (Exam exam: exams){
             exam.getSprite().draw(game.getBatch());
@@ -295,7 +315,9 @@ public class GameScreen implements Screen {
         player.dispose();
         map.dispose();
         mapRenderer.dispose();
-        badGuard1.dispose();
+        for (Guard guard : guards) {
+            guard.dispose();
+        }
         for (Exam exam: exams){
             exam.dispose();
         }
