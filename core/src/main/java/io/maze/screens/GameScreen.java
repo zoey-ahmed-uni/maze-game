@@ -79,14 +79,13 @@ public class GameScreen implements Screen {
                 add(new Guard(12.5f, 23f, false, 3f));
                 add(new Guard(10.5f, 21.5f, false, 3f));
                 add(new Guard(11f, 21.5f, true, 3f));
-                add(new Guard(4f, 16f, true, 5f));
+                add(new Guard(4f, 16.5f, true, 5f));
                 add(new Guard(4f, 16f, false, 1f));
                 add(new Guard(5f, 16.5f, false, 1f));
                 add(new Guard(6.5f, 11f, false, 1.5f));
-                add(new Guard(9f, 8.5f, true, 2f));
+                add(new Guard(9f, 8.5f, true, 4f));
                 add(new Guard(14f, 3f, false, 3f));
-                add(new Guard(15.5f, 4f, false, 3f));
-                add(new Guard(17f, 5.5f, false, 3f));
+                add(new Guard(17f, 4f, false, 3f));
             }
         };
 
