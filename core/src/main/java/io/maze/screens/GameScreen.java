@@ -259,9 +259,6 @@ public class GameScreen implements Screen {
                 guard.setDeltaY(0);
                 guard.getActiveSprite().translateX(guard.getDeltaX());
 
-                if (CollisionChecker.isColliding(guard, collisionObjects)){
-                    guard.setSpeed(-guard.getSpeed());
-                }
             } else {
                 if (guard.getSpeed() < 0) {
                     guard.setActiveSprite(guard.getFrontSprite());
@@ -273,9 +270,9 @@ public class GameScreen implements Screen {
                 guard.setDeltaX(0);
                 guard.getActiveSprite().translateY(guard.getDeltaY());
 
-                if (CollisionChecker.isColliding(guard, collisionObjects)){
-                    guard.setSpeed(-guard.getSpeed());
-                }
+            }
+            if (CollisionChecker.isColliding(guard, collisionObjects)){
+                guard.setSpeed(-guard.getSpeed());
             }
         }
 
