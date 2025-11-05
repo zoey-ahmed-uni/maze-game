@@ -84,7 +84,7 @@ public class MainMenu implements Screen{
         viewport.getCamera().unproject(touchPos);
 
 
-        //three boolean values that turn True if the user is hovering over the specified button
+        //boolean values that turn True if the user is hovering over the specified button
         //each one takes the mouse position and compares it to the place on the screen where the
         //button is drawn
         boolean isHoveringPlay = touchPos.x < playButtonX + playButtonWidth &&
