@@ -3,7 +3,7 @@ package io.maze.entities;
 public class Guard extends Entity{
     private final boolean horizontal;
 
-    public Guard(float x, float y, boolean horizontal) {
+    public Guard(float x, float y, boolean horizontal, float speed) {
         super("guard/front.png",
             "guard/back.png",
             "guard/right.png",
@@ -16,7 +16,7 @@ public class Guard extends Entity{
 
         this.horizontal = horizontal;
 
-        this.speed = 3f;
+        this.speed = speed;
 
     }
 
