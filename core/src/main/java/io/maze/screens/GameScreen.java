@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
     private float timeLeft;
 
     /**
-     * Instantiates a new Pause Screen.
+     * Instantiates a new Game Screen.
      *
      * @param game the game is passed in every time we create a new
      *             screen in order to access the spritebatch
