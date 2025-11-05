@@ -21,6 +21,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Game Screen
+ * has attributes for all the button images as well as its
+ * own viewport.
+ *
+ * Unlike other screens, the Game Screen has to handle more than just asset drawing:
+ * it handles a lot of game logic and keeps track of things like score
+ *
+ *
+ * as a general rule, every screen should have its own viewport
+ */
+
 public class GameScreen implements Screen {
     final Main game;
 
@@ -49,6 +61,14 @@ public class GameScreen implements Screen {
     private final OrthographicCamera hudCamera;
     private final BitmapFont font;
     private float timeLeft;
+
+    /**
+     * Instantiates a new Pause Screen.
+     *
+     * @param game the game is passed in every time we create a new
+     *             screen in order to access the spritebatch
+     *
+     */
 
     public GameScreen(final Main game){
         this.game = game;
@@ -122,11 +142,23 @@ public class GameScreen implements Screen {
         timeLeft = 300f;
     }
 
+    /**
+     * Here to just future-proof and make adding more pause
+     * logic later on easier
+     *
+     */
     public void unPause(){
         this.isPaused = false;
     }
 
+    @Override
+    public void pause(){
+        this.isPaused = true;
+    }
 
+    public int getScore(){
+        return this.score;
+    }
 
     @Override
     public void show(){
@@ -140,11 +172,6 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-        this.isPaused = true;
-    }
-
-    @Override
     public void resume() {
 
     }
@@ -154,11 +181,15 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * handles bringing up the pause screen when the
+     * esc key is pressed
+     */
     @Override
     public void render(float delta) {
         // Press ESC to pause
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            isPaused = true;
+            this.pause();
             game.setScreen(new PauseScreen(game, this)); // pass current screen
             return; // don’t update game logic this frame
         }

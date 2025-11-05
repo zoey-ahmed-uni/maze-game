@@ -10,9 +10,12 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 
 /**
- * Main Menu screen
+ * Pause screen
  * has attributes for all the button images as well as its
  * own viewport.
+ *
+ * Will be shown to the player when they pause the game with an
+ * option to resume the game or exit to the Main Menu
  *
  * as a general rule, every screen should have its own viewport
  */
@@ -29,7 +32,7 @@ public class PauseScreen implements Screen{
     Texture settingsButtonInactive;
 
     /**
-     * Instantiates a new Main menu.
+     * Instantiates a new Pause Screen.
      *
      * @param game the game is passed in every time we create a new
      *             screen in order to access the spritebatch
@@ -55,7 +58,7 @@ public class PauseScreen implements Screen{
     }
     /**
      * called when the screen renders itself
-     * handles the drawing of all the menu buttons
+     * handles the drawing of all the menu's buttons
      * */
     @Override
     public void render(float delta) {
@@ -88,7 +91,7 @@ public class PauseScreen implements Screen{
         viewport.getCamera().unproject(touchPos);
 
 
-        //three boolean values that turn True if the user is hovering over the specified button
+        //boolean values that turn True if the user is hovering over the specified button
         //each one takes the mouse position and compares it to the place on the screen where the
         //button is drawn
         boolean isHoveringResume = touchPos.x < resumeButtonX + resumeButtonWidth &&
@@ -106,15 +109,15 @@ public class PauseScreen implements Screen{
             touchPos.y < exitButtonY + exitButtonHeight &&
             touchPos.y > exitButtonY;
 
-        //if the user is not hovering play:
+        //if the user is not hovering resume:
         if (!isHoveringResume){
-            //draw the inactive play button
-            game.getBatch().draw(resumeButtonActive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
+            //draw the inactive resume button
+            game.getBatch().draw(resumeButtonInactive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
         }
         //otherwise:
         else{
-            //draw the active play button
-            game.getBatch().draw(resumeButtonInactive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
+            //draw the active resume button
+            game.getBatch().draw(resumeButtonActive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
         }
 
         if (!isHoveringSettings){
@@ -133,7 +136,7 @@ public class PauseScreen implements Screen{
 
         //if the user clicks:
         if (Gdx.input.justTouched()) {
-            //on the play button
+            //on the resume button
             if (isHoveringResume) {
                 //change the screen back to the game
                 game.setScreen(gameScreen);
@@ -146,8 +149,8 @@ public class PauseScreen implements Screen{
             }
             //on the exit button
             else if (isHoveringExit) {
-                //exit the application
-                Gdx.app.exit();
+                //go back to the Main Menu
+                game.setScreen(new MainMenu(game));
             }
         }
         game.getBatch().end();

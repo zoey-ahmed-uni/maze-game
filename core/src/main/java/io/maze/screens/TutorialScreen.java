@@ -10,9 +10,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 /**
- * Main Menu screen
+ * Tutorial screen
  * has attributes for all the button images as well as its
  * own viewport.
+ *
+ * Will be shown to the player before they start the game
  *
  * as a general rule, every screen should have its own viewport
  */
@@ -34,11 +36,12 @@ public class TutorialScreen implements Screen{
     Texture playButtonInactive;
 
     /**
-     * Instantiates a new Main menu.
+     * Instantiates a new Tutorial Screen.
      *
      * @param game the game is passed in every time we create a new
      *             screen in order to access the spritebatch
-     *
+     * @param menu passes in the Main Menu so that we can go back
+     *             to menu if player is not ready to start game yet
      */
     public TutorialScreen(final Main game, final MainMenu menu){
         this.game = game;
@@ -65,7 +68,7 @@ public class TutorialScreen implements Screen{
     }
     /**
      * called when the screen renders itself
-     * handles the drawing of all the menu buttons
+     * handles the drawing of all the menu's buttons
      * */
     @Override
     public void render(float delta) {
@@ -122,7 +125,7 @@ public class TutorialScreen implements Screen{
         viewport.getCamera().unproject(touchPos);
 
 
-        //three boolean value that turn True if the user is hovering over the back button
+        //boolean values that turn True if the user is hovering over the specified button
         //takes the mouse position and compares it to the place on the screen where the
         //button is drawn
 
@@ -176,7 +179,7 @@ public class TutorialScreen implements Screen{
                 game.setScreen(menu);
                 dispose();
             }
-
+            //on the play button
             else if (isHoveringPlay) {
                 //change the screen to the menu
                 game.setScreen(new GameScreen(game));
