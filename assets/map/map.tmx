@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#181425" nextlayerid="7" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#181425" nextlayerid="7" nextobjectid="58">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="1" name="tiles" width="30" height="30">
   <data encoding="csv">
@@ -82,6 +82,8 @@
   <object id="55" x="474.633" y="-6.67557" width="14.0187" height="378.505"/>
   <object id="56" x="78.1041" y="-26.7023" width="410.547" height="30.7076"/>
  </objectgroup>
- <objectgroup id="3" name="checkpoints"/>
+ <objectgroup id="3" name="checkpoints">
+  <object id="57" x="277.504" y="61.6677" width="8.85652" height="61.0116"/>
+ </objectgroup>
  <objectgroup id="5" name="objects"/>
 </map>

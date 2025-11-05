@@ -36,7 +36,10 @@ public class GameScreen implements Screen {
     private final MapObjects objectObjects;
     private final MapObjects checkpointObjects;
 
-    private final Guard badGuard;
+    private final Guard badGuard1;
+    private final Guard badGuard2;
+    private final Guard badGuard3;
+    private ArrayList<Guard> guards;
 
     private boolean isMovingUpDown;
 
@@ -68,12 +71,11 @@ public class GameScreen implements Screen {
 
         player = new Player();
 
-        badGuard = new Guard();
+        guards = new ArrayList<>();
 
-        badGuard.setX(13f);
-        badGuard.setY(24.5f);
-
-        badGuard.updateSpritePositions();
+        badGuard1 = new Guard(13f, 24.5f);
+        badGuard2 = new Guard(11f, 24.5f);
+        badGuard3 = new Guard(9f, 24.5f);
 
         isMovingUpDown = true;
 
@@ -212,29 +214,29 @@ public class GameScreen implements Screen {
             player.setSpawnPoint(player.getX(), player.getY());
         }
 
-        if (CollisionChecker.isColliding(player, badGuard)) {
+        if (CollisionChecker.isColliding(player, badGuard1)) {
             player.respawn();
             score-=10;
         }
         // NPC movement
         // true if moving up, false if moving down
         if (isMovingUpDown){
-            badGuard.setActiveSprite(badGuard.getBackSprite());
-            badGuard.setDeltaY(badGuard.getSpeed() * delta);
-            badGuard.setDeltaX(0);
-            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
+            badGuard1.setActiveSprite(badGuard1.getBackSprite());
+            badGuard1.setDeltaY(badGuard1.getSpeed() * delta);
+            badGuard1.setDeltaX(0);
+            badGuard1.getActiveSprite().translateY(badGuard1.getDeltaY());
 
-            if (CollisionChecker.isColliding(badGuard, collisionObjects)){
+            if (CollisionChecker.isColliding(badGuard1, collisionObjects)){
                 isMovingUpDown = false;
             }
 
         } else {
-            badGuard.setActiveSprite(badGuard.getFrontSprite());
-            badGuard.setDeltaY(-badGuard.getSpeed() * delta);
-            badGuard.setDeltaX(0);
-            badGuard.getActiveSprite().translateY(badGuard.getDeltaY());
+            badGuard1.setActiveSprite(badGuard1.getFrontSprite());
+            badGuard1.setDeltaY(-badGuard1.getSpeed() * delta);
+            badGuard1.setDeltaX(0);
+            badGuard1.getActiveSprite().translateY(badGuard1.getDeltaY());
 
-            if (CollisionChecker.isColliding(badGuard, collisionObjects)){
+            if (CollisionChecker.isColliding(badGuard1, collisionObjects)){
                 isMovingUpDown = true;
             }
         }
@@ -262,16 +264,16 @@ public class GameScreen implements Screen {
         player.setX(player.getActiveSprite().getX());
         player.setY(player.getActiveSprite().getY());
 
-        badGuard.setX(badGuard.getActiveSprite().getX());
-        badGuard.setY(badGuard.getActiveSprite().getY());
+        badGuard1.setX(badGuard1.getActiveSprite().getX());
+        badGuard1.setY(badGuard1.getActiveSprite().getY());
 
         game.getBatch().begin();
 
         player.updateSpritePositions();
-        badGuard.updateSpritePositions();
+        badGuard1.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
-        badGuard.getActiveSprite().draw(game.getBatch());
+        badGuard1.getActiveSprite().draw(game.getBatch());
 
         for (Exam exam: exams){
             exam.getSprite().draw(game.getBatch());
@@ -293,7 +295,7 @@ public class GameScreen implements Screen {
         player.dispose();
         map.dispose();
         mapRenderer.dispose();
-        badGuard.dispose();
+        badGuard1.dispose();
         for (Exam exam: exams){
             exam.dispose();
         }
