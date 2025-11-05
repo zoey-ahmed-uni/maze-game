@@ -1,14 +1,26 @@
 package io.maze.entities;
 
 public class Guard extends Entity{
-    public Guard() {
+    private final boolean horizontal;
+
+    public Guard(float x, float y, boolean horizontal, float speed) {
         super("guard/front.png",
             "guard/back.png",
             "guard/right.png",
             "guard/left.png"
         );
 
-        this.speed = 3f;
+        this.setX(x);
+        this.setY(y);
+        this.updateSpritePositions();
 
+        this.horizontal = horizontal;
+
+        this.speed = speed;
+
+    }
+
+    public boolean isMovingHorizontally() {
+        return this.horizontal;
     }
 }

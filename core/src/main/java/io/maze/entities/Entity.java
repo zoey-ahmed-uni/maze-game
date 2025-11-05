@@ -75,6 +75,10 @@ public abstract class Entity {
         this.y = y;
     }
 
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
     public float getSpeed() {
         return speed;
     }

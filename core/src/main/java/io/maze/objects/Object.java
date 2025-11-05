@@ -20,7 +20,7 @@ public abstract class Object {
     public void setPosition(MapObjects objects) {
         for (RectangleMapObject object : objects.getByType(RectangleMapObject.class)) {
             if (object.getName().equals(this.name)) {
-                this.sprite.setPosition(object.getRectangle().x / 16f - this.sprite.getWidth() / 2, object.getRectangle().y / 16f - this.sprite.getHeight() / 2);
+                this.sprite.setPosition(object.getRectangle().x / 16f, object.getRectangle().y / 16f);
             }
         }
     }
