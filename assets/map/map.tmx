@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#181425" nextlayerid="8" nextobjectid="76">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#181425" nextlayerid="8" nextobjectid="89">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="1" name="tiles" width="30" height="30">
   <data encoding="csv">
@@ -71,7 +71,7 @@
   <object id="44" x="348.196" y="34.4748" width="22.9832" height="113.631"/>
   <object id="45" x="366.582" y="33.9003" width="68.9497" height="48.2648"/>
   <object id="46" x="-2.69784" y="51.259" width="294.065" height="16.1871"/>
-  <object id="47" x="-7.19424" y="3.59712" width="90.8273" height="55.7554"/>
+  <object id="47" x="69.8069" y="3.59712" width="13.8262" height="55.7554"/>
   <object id="48" x="75.7151" y="114.04" width="7.47803" height="64.9654"/>
   <object id="49" x="74.7803" y="147.691" width="23.8362" height="47.2051"/>
   <object id="50" x="-15.8908" y="177.136" width="94.4102" height="17.293"/>
@@ -84,13 +84,21 @@
   <object id="60" name="exam3" x="282.041" y="63.2048" width="7.57592" height="58.6593"/>
   <object id="64" name="exam1" x="349.467" y="210.542" width="7.57592" height="50.0679"/>
   <object id="75" name="exam5" x="154.393" y="265.672" width="7.57592" height="50.0679"/>
+  <object id="85" name="exam7" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
+  <object id="86" name="exam8" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
+  <object id="87" name="exam9" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
+  <object id="88" name="exam10" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
   <object id="67" name="exam4" x="96.1959" y="150.033" width="61.2156" height="8.74508"/>
+  <object id="76" name="exam6" x="79.892" y="404.374" width="48.58" height="8.74508"/>
   <object id="69" name="exam2" x="417.162" y="259.985" width="61.2156" height="8.74508"/>
  </objectgroup>
  <objectgroup id="3" name="checkpoints">
   <object id="57" name="checkpoint3" x="269.809" y="62.4006" width="8.85652" height="61.0116"/>
+  <object id="78" name="checkpoint7" x="140.813" y="270.939" width="8.85652" height="39.5377"/>
+  <object id="84" name="checkpoint8" x="178.57" y="415.33" width="8.85652" height="39.5377"/>
+  <object id="79" name="checkpoint6" x="37.5111" y="319.695" width="8.85652" height="39.5377"/>
   <object id="71" name="checkpoint1" x="282.088" y="2.58914" width="8.85652" height="50.4214"/>
-  <object id="72" name="checkpoint2" x="117.92" y="3.02003" width="8.85652" height="50.4214"/>
+  <object id="72" name="checkpoint2" x="109.303" y="3.55862" width="8.85652" height="50.4214"/>
   <object id="68" name="checkpoint5" x="95.7442" y="161.524" width="61.5666" height="7.72508"/>
   <object id="73" name="checkpoint4" x="18.6517" y="116.248" width="61.5666" height="7.72508"/>
  </objectgroup>
@@ -100,6 +108,11 @@
   <object id="70" name="exam2" x="350.935" y="173.449" width="22.7458" height="17.4968"/>
   <object id="65" name="exam4" x="36.1668" y="147.233" width="22.7458" height="17.4968"/>
   <object id="74" name="exam5" x="9.7178" y="332.008" width="22.7458" height="17.4968"/>
+  <object id="77" name="exam6" x="43.956" y="427.386" width="22.7458" height="17.4968"/>
+  <object id="80" name="exam8" x="219.174" y="388.764" width="22.7458" height="17.4968"/>
+  <object id="81" name="exam10" x="268.181" y="425.857" width="22.7458" height="17.4968"/>
+  <object id="82" name="exam9" x="267.532" y="387.691" width="22.7458" height="17.4968"/>
+  <object id="83" name="exam7" x="219.366" y="426.313" width="22.7458" height="17.4968"/>
  </objectgroup>
  <objectgroup id="7" name="finish">
   <object id="58" x="468.563" y="380.37" width="12.2333" height="59.4595"/>

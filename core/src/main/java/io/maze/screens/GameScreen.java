@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
         this.finishObjects = map.getLayers().get("finish").getObjects();
 
         camera = new OrthographicCamera();
-        camera.zoom = 3f;
+        camera.zoom = 0.5f;
         camera.setToOrtho(false, 16, 9);
 
         viewport = new FitViewport(16,9,camera);
@@ -82,6 +82,11 @@ public class GameScreen implements Screen {
                 add(new Guard(4f, 16f, true, 5f));
                 add(new Guard(4f, 16f, false, 1f));
                 add(new Guard(5f, 16.5f, false, 1f));
+                add(new Guard(6.5f, 11f, false, 1.5f));
+                add(new Guard(9f, 8.5f, true, 2f));
+                add(new Guard(14f, 3f, false, 3f));
+                add(new Guard(15.5f, 4f, false, 3f));
+                add(new Guard(17f, 5.5f, false, 3f));
             }
         };
 
@@ -91,6 +96,12 @@ public class GameScreen implements Screen {
                 add(new Exam("exam2"));
                 add(new Exam("exam3"));
                 add(new Exam("exam4"));
+                add(new Exam("exam5"));
+                add(new Exam("exam6"));
+                add(new Exam("exam7"));
+                add(new Exam("exam8"));
+                add(new Exam("exam9"));
+                add(new Exam("exam10"));
             }
         };
 
