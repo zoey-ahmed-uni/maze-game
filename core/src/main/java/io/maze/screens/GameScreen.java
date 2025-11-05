@@ -267,7 +267,8 @@ public class GameScreen implements Screen {
         }
 
         if (CollisionChecker.isColliding(player, finishObjects)) {
-            // Transition to Game Win screen
+            score += (int)timeLeft;
+            game.setScreen(new WinScreen(game, this));
         }
 
         for (Guard guard : guards) {
@@ -309,9 +310,9 @@ public class GameScreen implements Screen {
 
         if (timeLeft > 0) {
             timeLeft -= delta;
-        } else {
-            score += (int)timeLeft;
-            // Transition to Game Over screen
+        }
+        else {
+            game.setScreen(new GameOverScreen(game));
         }
     }
 
