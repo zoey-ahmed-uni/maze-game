@@ -10,11 +10,9 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 
 /**
- * Main Menu screen
- * has attributes for all the button images as well as its
- * own viewport.
- *
- * as a general rule, every screen should have its own viewport
+ * The MainMenu screen contains attributes for all the button images as well as its own viewport.
+ * <p>
+ * As a general rule, every screen should have its own viewport.
  */
 public class MainMenu implements Screen{
 
@@ -49,10 +47,7 @@ public class MainMenu implements Screen{
     public void show() {
 
     }
-    /**
-     * called when the screen renders itself
-     * handles the drawing of all the menu buttons
-     * */
+    /** Called when the screen renders itself, handles the drawing of all the menu buttons. */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -148,11 +143,7 @@ public class MainMenu implements Screen{
         game.getBatch().end();
     }
 
-    /**
-     * called whenever the application is resized
-     * updates how the viewport scales with screen pixels
-     * to keep the aspect ratio consistent
-     * */
+    /** Scales the application according to the correct aspect ratio when it is resized. */
     @Override
     public void resize(int i, int i1) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
