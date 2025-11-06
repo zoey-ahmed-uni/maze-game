@@ -20,7 +20,7 @@ public class CollisionChecker {
      *
      * @param entity {@link io.maze.entities.Player Player} or {@link io.maze.entities.Guard Guard}
      * @param objects collidable objects on the map e.g. Map Walls
-     * @return boolean true if collision is occurring
+     * @return true if collision is occurring
      */
     public static boolean isColliding(Entity entity, MapObjects objects) {
 
@@ -57,7 +57,7 @@ public class CollisionChecker {
      * @param objects collidable objects on the map
      * @param exceptions objects which are not meant to be collidable
      * e.g. completed {@link io.maze.objects.Exam Exams}
-     * @return boolean true if collision is occurring
+     * @return true if collision is occurring
      */
     public static boolean isColliding(Entity entity, MapObjects objects, List<String> exceptions) {
 
@@ -95,7 +95,7 @@ public class CollisionChecker {
      *
      * @param player the character the player is controlling
      * @param entity a non-playable character such as a {@link io.maze.entities.Guard Guard}
-     * @return boolean true if a collision is occurring
+     * @return true if a collision is occurring
      */
     public static boolean isColliding(Player player, Entity entity) {
         Rectangle playerHitbox = new Rectangle(
@@ -120,7 +120,7 @@ public class CollisionChecker {
      *
      * @param player the character the player is controlling
      * @param object item on the map, e.g. uncompleted {@link io.maze.objects.Exam Exams}
-     * @return boolean true if a collision is occurring
+     * @return true if a collision is occurring
      */
     public static boolean isColliding(Player player, Object object) {
         Rectangle playerHitbox = new Rectangle(
