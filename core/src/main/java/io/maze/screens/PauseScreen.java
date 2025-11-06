@@ -10,11 +10,12 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 
 /**
- * Main Menu screen
- * has attributes for all the button images as well as its
+ * The PauseScreen contains attributes for all the button images as well as its
  * own viewport.
  *
- * as a general rule, every screen should have its own viewport
+ * As a general rule, every screen should have its own viewport
+ * 
+ * @see MainMenu
  */
 public class PauseScreen implements Screen{
 
@@ -29,13 +30,8 @@ public class PauseScreen implements Screen{
     Texture settingsButtonInactive;
 
     /**
-     * Instantiates a new Main menu.
-     *
-     * @param game the game is passed in every time we create a new
-     *             screen in order to access the spritebatch
-     * @param gameScreen allows us to return to the game in its
-     *                   original state after a pause
-     *
+     * @param game passed in every time a new screen is created in order to access the spritebatch
+     * @param gameScreen allows us to return to the game in its original state after a pause
      */
     public PauseScreen(final Main game, final GameScreen gameScreen){
         this.game = game;
@@ -54,9 +50,12 @@ public class PauseScreen implements Screen{
 
     }
     /**
-     * called when the screen renders itself
-     * handles the drawing of all the menu buttons
-     * */
+     * Called when the screen renders itself.
+     * <p>
+     * Handles the drawing of all the menu buttons
+     * 
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -154,12 +153,15 @@ public class PauseScreen implements Screen{
     }
 
     /**
-     * called whenever the application is resized
-     * updates how the viewport scales with screen pixels
-     * to keep the aspect ratio consistent
+     * Called whenever the application is resized.
+     * <p>
+     * Updates how the viewport scales with screen pixels to keep the aspect ratio consistent.
+     * 
+     * @param h height
+     * @param w width
      * */
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int h, int w) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set the camera centrally
         viewport.getCamera().position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f, 0);
