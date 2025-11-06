@@ -1,5 +1,6 @@
 package io.maze.entities;
 
+/** The Guard class represents a negative non-playable character within the game. */
 public class Guard extends Entity{
     private final boolean horizontal;
 
@@ -20,6 +21,7 @@ public class Guard extends Entity{
 
     }
 
+    /** {@return true if guard is moving horizontally} */
     public boolean isMovingHorizontally() {
         return this.horizontal;
     }
