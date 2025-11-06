@@ -37,38 +37,22 @@ public class Main extends Game {
         super.render();
     }
 
-    /**
-     * Gets sprite batch.
-     *
-     * @return the sprite batch
-     */
+    /** {@return the sprite batch} */
     public SpriteBatch getBatch(){
         return this.batch;
     }
 
-    /**
-     * Sets batch.
-     *
-     * @param batch
-     */
+    /** @param batch the new batch */
     public void setBatch(SpriteBatch batch) {
         this.batch = batch;
     }
 
-    /**
-     * Gets width.
-     *
-     * @return the width
-     */
+    /** {@return the width} */
     public int getWidth(){
         return WIDTH;
     }
 
-    /**
-     * Gets height.
-     *
-     * @return the height
-     */
+    /** {@return the height} */
     public int getHeight(){
         return HEIGHT;
     }
