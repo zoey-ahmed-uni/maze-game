@@ -10,13 +10,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 /**
- * Tutorial screen
- * has attributes for all the button images as well as its
+ * Contains attributes for all the button images as well as its
  * own viewport.
  *
- * Will be shown to the player before they start the game
- *
- * as a general rule, every screen should have its own viewport
+ * As a general rule, every screen should have its own viewport
  */
 public class TutorialScreen implements Screen{
 
@@ -24,24 +21,12 @@ public class TutorialScreen implements Screen{
     private final MainMenu menu;
     private final BitmapFont font;
     private final ExtendViewport viewport;
-    Texture escKey;
-    Texture wKey;
-    Texture aKey;
-    Texture sKey;
-    Texture dKey;
-    Texture eKey;
-    Texture backInactive;
-    Texture backActive;
-    Texture playButtonActive;
-    Texture playButtonInactive;
 
-    /**
-     * Instantiates a new Tutorial Screen.
-     *
-     * @param game the game is passed in every time we create a new
-     *             screen in order to access the spritebatch
-     * @param menu passes in the Main Menu so that we can go back
-     *             to menu if player is not ready to start game yet
+    Texture escKey, wKey, aKey, sKey, dKey, eKey;
+    Texture backInactive, backActive, playButtonActive, playButtonInactive;
+
+    /* The game is passed in every time we create a new screen,
+     * in order to access the spritebatch.
      */
     public TutorialScreen(final Main game, final MainMenu menu){
         this.game = game;
@@ -67,9 +52,10 @@ public class TutorialScreen implements Screen{
 
     }
     /**
-     * called when the screen renders itself
-     * handles the drawing of all the menu's buttons
-     * */
+     * Called when the screen renders itself, handles the drawing of all the menu buttons.
+     *
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.SLATE);
@@ -79,56 +65,27 @@ public class TutorialScreen implements Screen{
 
         game.getBatch().begin();
 
-        final float backButtonWidth = 5f;
-        final float backButtonHeight = 2f;
-        final float backButtonX = 1f;
-        final float backButtonY = 1f;
+        // Setting the heights, widths and positions of the various buttons
+        final float backButtonWidth = 5f, backButtonHeight = 2f, backButtonX = 1f, backButtonY = 1f;
 
-        final float playButtonWidth = 5f;
-        final float playButtonHeight = 2f;
+        final float playButtonWidth = 5f, playButtonHeight = 2f;
         final float playButtonX = viewport.getWorldWidth() - 6f;
         final float playButtonY = 1f;
 
-        final float wWidth = 1f;
-        final float wHeight = 1f;
-        final float wButtonX = 2f;
-        final float wButtonY = 9f;
 
-        final float aWidth = 1f;
-        final float aHeight = 1f;
-        final float aButtonX = 1f;
-        final float aButtonY = 8f;
-
-        final float sWidth = 1f;
-        final float sHeight = 1f;
-        final float sButtonX = 2f;
-        final float sButtonY = 8f;
-
-        final float dWidth = 1f;
-        final float dHeight = 1f;
-        final float dButtonX = 3f;
-        final float dButtonY = 8f;
-
-        final float eWidth = 1f;
-        final float eHeight = 1f;
-        final float eButtonX = 2f;
-        final float eButtonY = 6f;
-
-        final float escWidth = 1f;
-        final float escHeight = 1f;
-        final float escButtonX = 2f;
-        final float escButtonY = 4f;
+        final float wWidth = 1f, wHeight = 1f, wButtonX = 2f, wButtonY = 9f;
+        final float aWidth = 1f, aHeight = 1f, aButtonX = 1f, aButtonY = 8f;
+        final float sWidth = 1f, sHeight = 1f, sButtonX = 2f, sButtonY = 8f;
+        final float dWidth = 1f, dHeight = 1f, dButtonX = 3f, dButtonY = 8f;
+        final float eWidth = 1f, eHeight = 1f, eButtonX = 2f, eButtonY = 6f;
+        final float escWidth = 1f, escHeight = 1f, escButtonX = 2f, escButtonY = 4f;
 
 
-        //Convert world coordinates to screen coordinates
+        // Convert world coordinates to screen coordinates
         Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.getCamera().unproject(touchPos);
 
-
-        //boolean values that turn True if the user is hovering over the specified button
-        //takes the mouse position and compares it to the place on the screen where the
-        //button is drawn
-
+        // TODO: Seperate this logic into a helper function 'isHovering(Button)'
         boolean isHoveringBack = touchPos.x < backButtonX + backButtonWidth &&
             touchPos.x > backButtonX &&
             touchPos.y < backButtonY + backButtonHeight &&
@@ -153,14 +110,13 @@ public class TutorialScreen implements Screen{
         game.getBatch().draw(eKey,eButtonX,eButtonY,eWidth,eHeight);
         game.getBatch().draw(escKey,escButtonX,escButtonY,escWidth,escHeight);
 
-        //if the user is not hovering back:
+        // If the user is not hovering back:
         if (!isHoveringBack){
-            //draw inactive sprite
+            // Draw inactive sprite
             game.getBatch().draw(backInactive, backButtonX, backButtonY,backButtonWidth,backButtonHeight);
         }
-        //if they are
         else{
-            //draw the active sprite
+            // Draw the active sprite
             game.getBatch().draw(backActive, backButtonX, backButtonY,backButtonWidth,backButtonHeight);
         }
 
@@ -171,15 +127,15 @@ public class TutorialScreen implements Screen{
             game.getBatch().draw(playButtonActive, playButtonX, playButtonY,playButtonWidth,playButtonHeight);
         }
 
-        //if the user clicks:
+        // On click
         if (Gdx.input.justTouched()) {
-            //on the back button
+            // On the back button
             if (isHoveringBack) {
-                //change the screen to the menu
+                // Change the screen to the menu
                 game.setScreen(menu);
                 dispose();
             }
-            //on the play button
+
             else if (isHoveringPlay) {
                 //change the screen to the menu
                 game.setScreen(new GameScreen(game));
@@ -190,12 +146,15 @@ public class TutorialScreen implements Screen{
     }
 
     /**
-     * called whenever the application is resized
-     * updates how the viewport scales with screen pixels
-     * to keep the aspect ratio consistent
-     * */
+     * Called whenever the application is resized
+     * <p>
+     * Updates how the viewport scales with screen pixels to keep the aspect ratio consistent.
+     *
+     * @param w width
+     * @param h height
+     */
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int w, int h) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set the camera centrally
         viewport.getCamera().position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f, 0);

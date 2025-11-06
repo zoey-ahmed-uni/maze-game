@@ -22,17 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Game Screen
- * has attributes for all the button images as well as its
- * own viewport.
+ * Represents the game screen of the application.
  *
- * Unlike other screens, the Game Screen has to handle more than just asset drawing:
- * it handles a lot of game logic and keeps track of things like score
- *
- *
- * as a general rule, every screen should have its own viewport
+ * @see com.badlogic.gdx.Screen Screen
  */
-
 public class GameScreen implements Screen {
     final Main game;
 
@@ -44,10 +37,7 @@ public class GameScreen implements Screen {
 
     private final Player player;
 
-    private final MapObjects collisionObjects;
-    private final MapObjects objectObjects;
-    private final MapObjects checkpointObjects;
-    private final MapObjects finishObjects;
+    private final MapObjects collisionObjects, objectObjects, checkpointObjects, finishObjects;
 
     private ArrayList<Guard> guards;
 
@@ -142,11 +132,6 @@ public class GameScreen implements Screen {
         timeLeft = 300f;
     }
 
-    /**
-     * Here to just future-proof and make adding more pause
-     * logic later on easier
-     *
-     */
     public void unPause(){
         this.isPaused = false;
     }
@@ -165,6 +150,12 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Sets the screen's new width and height.
+     *
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -182,8 +173,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * handles bringing up the pause screen when the
-     * esc key is pressed
+     * @param delta the delta time
      */
     @Override
     public void render(float delta) {
@@ -198,7 +188,11 @@ public class GameScreen implements Screen {
         logic();
         draw();
     }
-
+    /**
+     * Determines what actions to perform on a given input from the player.
+     * <p>
+     * Mainly handles player movement, but additionally interaction with {@link io.maze.objects.Exam exams}.
+     */
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
@@ -255,9 +249,17 @@ public class GameScreen implements Screen {
             }
         }
     }
-
+    /**
+     * Handles the various events that occur throughout the game such as:
+     * <ul>
+     * <li> checkpoints
+     * <li> guard movement
+     * <li> timer
+     * <li> game completion
+     * <li> game failure
+     * </ul>
+     */
     private void logic() {
-
         float delta = Gdx.graphics.getDeltaTime();
 
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
@@ -314,6 +316,7 @@ public class GameScreen implements Screen {
         }
     }
 
+    /** Draws map, text, characters and objects to screen. Additionally, updates camera movement.*/
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
@@ -358,7 +361,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        //game.getBatch().dispose();
         player.dispose();
         map.dispose();
         mapRenderer.dispose();

@@ -10,35 +10,25 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 
 /**
- * Pause screen
- * has attributes for all the button images as well as its
+ * The PauseScreen contains attributes for all the button images as well as its
  * own viewport.
  *
- * Will be shown to the player when they pause the game with an
- * option to resume the game or exit to the Main Menu
+ * As a general rule, every screen should have its own viewport
  *
- * as a general rule, every screen should have its own viewport
+ * @see MainMenu
  */
 public class PauseScreen implements Screen{
 
     final Main game;
     final GameScreen gameScreen;
     private final ExtendViewport viewport;
-    Texture resumeButtonActive;
-    Texture resumeButtonInactive;
-    Texture exitButtonActive;
-    Texture exitButtonInactive;
-    Texture settingsButtonActive;
-    Texture settingsButtonInactive;
+    Texture resumeButtonActive, resumeButtonInactive;
+    Texture exitButtonActive, exitButtonInactive;
+    Texture settingsButtonActive, settingsButtonInactive;
 
     /**
-     * Instantiates a new Pause Screen.
-     *
-     * @param game the game is passed in every time we create a new
-     *             screen in order to access the spritebatch
-     * @param gameScreen allows us to return to the game in its
-     *                   original state after a pause
-     *
+     * @param game passed in every time a new screen is created in order to access the spritebatch
+     * @param gameScreen allows us to return to the game in its original state after a pause
      */
     public PauseScreen(final Main game, final GameScreen gameScreen){
         this.game = game;
@@ -57,9 +47,12 @@ public class PauseScreen implements Screen{
 
     }
     /**
-     * called when the screen renders itself
-     * handles the drawing of all the menu's buttons
-     * */
+     * Called when the screen renders itself.
+     * <p>
+     * Handles the drawing of all the menu buttons
+     *
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -69,20 +62,15 @@ public class PauseScreen implements Screen{
 
         game.getBatch().begin();
 
-        final float exitButtonWidth = 5f;
-        final float exitButtonHeight = 2f;
+        final float exitButtonWidth = 5f, exitButtonHeight = 2f;
         final float exitButtonX = viewport.getWorldWidth() / 2f - exitButtonWidth / 2f;
         final float exitButtonY = 1f;
 
-
-        final float settingsButtonWidth = 5f;
-        final float settingsButtonHeight = 2f;
+        final float settingsButtonWidth = 5f, settingsButtonHeight = 2f;
         final float settingsButtonX = viewport.getWorldWidth() / 2f - settingsButtonWidth / 2f;
         final float settingsButtonY = 5f;
 
-
-        final float resumeButtonWidth = 5f;
-        final float resumeButtonHeight = 2f;
+        final float resumeButtonWidth = 5f, resumeButtonHeight = 2f;
         final float resumeButtonX = viewport.getWorldWidth() / 2f - resumeButtonWidth / 2f;
         final float resumeButtonY = 9f;
 
@@ -157,12 +145,15 @@ public class PauseScreen implements Screen{
     }
 
     /**
-     * called whenever the application is resized
-     * updates how the viewport scales with screen pixels
-     * to keep the aspect ratio consistent
+     * Called whenever the application is resized.
+     * <p>
+     * Updates how the viewport scales with screen pixels to keep the aspect ratio consistent.
+     *
+     * @param h height
+     * @param w width
      * */
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int h, int w) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set the camera centrally
         viewport.getCamera().position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f, 0);

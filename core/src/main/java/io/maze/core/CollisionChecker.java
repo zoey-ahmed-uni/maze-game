@@ -9,8 +9,19 @@ import io.maze.entities.Player;
 import io.maze.objects.Object;
 import java.util.List;
 
+/**
+ * The CollisionChecker class contains static methods which determine if a collision is occurring.
+ */
+
 public class CollisionChecker {
 
+    /**
+     * Checks for collisions between an entity and collidable objects on the map.
+     *
+     * @param entity {@link io.maze.entities.Player Player} or {@link io.maze.entities.Guard Guard}
+     * @param objects collidable objects on the map e.g. Map Walls
+     * @return boolean true if collision is occurring
+     */
     public static boolean isColliding(Entity entity, MapObjects objects) {
 
         Rectangle futureHitbox = new Rectangle(
@@ -38,6 +49,16 @@ public class CollisionChecker {
         return false;
     }
 
+    /**
+     * Checks for collisions between an entity and collidable objects on the map with the ability
+     * to specify exceptions.
+     *
+     * @param entity {@link io.maze.entities.Player Player} or {@link io.maze.entities.Guard Guard}
+     * @param objects collidable objects on the map
+     * @param exceptions objects which are not meant to be collidable
+     * e.g. completed {@link io.maze.objects.Exam Exams}
+     * @return boolean true if collision is occurring
+     */
     public static boolean isColliding(Entity entity, MapObjects objects, List<String> exceptions) {
 
         Rectangle futureHitbox = new Rectangle(
@@ -69,6 +90,13 @@ public class CollisionChecker {
         return false;
     }
 
+    /**
+     * Checks for collisions between the player and another entity.
+     *
+     * @param player the character the player is controlling
+     * @param entity a non-playable character such as a {@link io.maze.entities.Guard Guard}
+     * @return boolean true if a collision is occurring
+     */
     public static boolean isColliding(Player player, Entity entity) {
         Rectangle playerHitbox = new Rectangle(
             player.getActiveSprite().getX(),
@@ -87,6 +115,13 @@ public class CollisionChecker {
         return Intersector.overlaps(playerHitbox, entityHitbox);
     }
 
+    /**
+     * Checks for collisions between the player and an object.
+     *
+     * @param player the character the player is controlling
+     * @param object item on the map, e.g. uncompleted {@link io.maze.objects.Exam Exams}
+     * @return boolean true if a collision is occurring
+     */
     public static boolean isColliding(Player player, Object object) {
         Rectangle playerHitbox = new Rectangle(
             player.getActiveSprite().getX(),

@@ -1,5 +1,6 @@
 package io.maze.objects;
 
+/** Represents an exam the player must complete to progress. */
 public class Exam extends Object {
     private boolean completed;
 
