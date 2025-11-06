@@ -10,11 +10,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 /**
- * Main Menu screen
- * has attributes for all the button images as well as its
+ * Contains attributes for all the button images as well as its
  * own viewport.
- *
- * as a general rule, every screen should have its own viewport
+ * 
+ * As a general rule, every screen should have its own viewport
  */
 public class TutorialScreen implements Screen{
 
@@ -33,12 +32,8 @@ public class TutorialScreen implements Screen{
     Texture playButtonActive;
     Texture playButtonInactive;
 
-    /**
-     * Instantiates a new Main menu.
-     *
-     * @param game the game is passed in every time we create a new
-     *             screen in order to access the spritebatch
-     *
+    /* The game is passed in every time we create a new screen,
+     * in order to access the spritebatch.
      */
     public TutorialScreen(final Main game, final MainMenu menu){
         this.game = game;
@@ -64,9 +59,10 @@ public class TutorialScreen implements Screen{
 
     }
     /**
-     * called when the screen renders itself
-     * handles the drawing of all the menu buttons
-     * */
+     * Called when the screen renders itself, handles the drawing of all the menu buttons.
+     * 
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.SLATE);
@@ -117,15 +113,11 @@ public class TutorialScreen implements Screen{
         final float escButtonY = 4f;
 
 
-        //Convert world coordinates to screen coordinates
+        // Convert world coordinates to screen coordinates
         Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.getCamera().unproject(touchPos);
 
-
-        //three boolean value that turn True if the user is hovering over the back button
-        //takes the mouse position and compares it to the place on the screen where the
-        //button is drawn
-
+        // TODO: Seperate this logic into a helper function 'isHovering(Button)'
         boolean isHoveringBack = touchPos.x < backButtonX + backButtonWidth &&
             touchPos.x > backButtonX &&
             touchPos.y < backButtonY + backButtonHeight &&
@@ -150,14 +142,13 @@ public class TutorialScreen implements Screen{
         game.getBatch().draw(eKey,eButtonX,eButtonY,eWidth,eHeight);
         game.getBatch().draw(escKey,escButtonX,escButtonY,escWidth,escHeight);
 
-        //if the user is not hovering back:
+        // If the user is not hovering back:
         if (!isHoveringBack){
-            //draw inactive sprite
+            // Draw inactive sprite
             game.getBatch().draw(backInactive, backButtonX, backButtonY,backButtonWidth,backButtonHeight);
         }
-        //if they are
         else{
-            //draw the active sprite
+            // Draw the active sprite
             game.getBatch().draw(backActive, backButtonX, backButtonY,backButtonWidth,backButtonHeight);
         }
 
@@ -168,11 +159,11 @@ public class TutorialScreen implements Screen{
             game.getBatch().draw(playButtonActive, playButtonX, playButtonY,playButtonWidth,playButtonHeight);
         }
 
-        //if the user clicks:
+        // On click
         if (Gdx.input.justTouched()) {
-            //on the back button
+            // On the back button
             if (isHoveringBack) {
-                //change the screen to the menu
+                // Change the screen to the menu
                 game.setScreen(menu);
                 dispose();
             }
@@ -187,12 +178,15 @@ public class TutorialScreen implements Screen{
     }
 
     /**
-     * called whenever the application is resized
-     * updates how the viewport scales with screen pixels
-     * to keep the aspect ratio consistent
-     * */
+     * Called whenever the application is resized
+     * <p>
+     * Updates how the viewport scales with screen pixels to keep the aspect ratio consistent.
+     * 
+     * @param w width
+     * @param h height
+     */
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int w, int h) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set the camera centrally
         viewport.getCamera().position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f, 0);
