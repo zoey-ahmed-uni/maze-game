@@ -21,6 +21,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the game screen of the application.
+ * 
+ * @see com.badlogic.gdx.Screen Screen
+ */
 public class GameScreen implements Screen {
     final Main game;
 
@@ -126,13 +131,17 @@ public class GameScreen implements Screen {
         this.isPaused = false;
     }
 
-
-
     @Override
     public void show(){
 
     }
 
+    /** 
+     * Sets the screen's new width and height.
+     * 
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -154,20 +163,27 @@ public class GameScreen implements Screen {
 
     }
 
+    /** 
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         // Press ESC to pause
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPaused = true;
-            game.setScreen(new PauseScreen(game, this)); // pass current screen
-            return; // don’t update game logic this frame
+            game.setScreen(new PauseScreen(game, this));
+            return;
         }
 
         input();
         logic();
         draw();
     }
-
+    /** 
+     * Determines what actions to perform on a given input from the player.
+     * <p>
+     * Mainly handles player movement, but additionally interaction with {@link io.maze.objects.Exam exams}.
+     */
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
@@ -224,9 +240,17 @@ public class GameScreen implements Screen {
             }
         }
     }
-
+    /** 
+     * Handles the various events that occur throughout the game such as:
+     * <ul>
+     * <li> checkpoints
+     * <li> guard movement
+     * <li> timer
+     * <li> game completion
+     * <li> game failure
+     * </ul>
+     */
     private void logic() {
-
         float delta = Gdx.graphics.getDeltaTime();
 
         System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
@@ -236,7 +260,7 @@ public class GameScreen implements Screen {
         }
 
         if (CollisionChecker.isColliding(player, finishObjects)) {
-            // Transition to Game Win screen
+            // TODO: Implement transition to Game Win screen logic
         }
 
         for (Guard guard : guards) {
@@ -283,10 +307,11 @@ public class GameScreen implements Screen {
             timeLeft -= delta;
         } else {
             score += (int)timeLeft;
-            // Transition to Game Over screen
+            // TODO: Implement transition to Game Over screen logic
         }
     }
 
+    /** Draws map, text, characters and objects to screen. Additionally, updates camera movement.*/
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
@@ -331,7 +356,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        //game.getBatch().dispose();
         player.dispose();
         map.dispose();
         mapRenderer.dispose();
