@@ -37,10 +37,7 @@ public class GameScreen implements Screen {
 
     private final Player player;
 
-    private final MapObjects collisionObjects;
-    private final MapObjects objectObjects;
-    private final MapObjects checkpointObjects;
-    private final MapObjects finishObjects;
+    private final MapObjects collisionObjects, objectObjects, checkpointObjects, finishObjects;
 
     private ArrayList<Guard> guards;
 

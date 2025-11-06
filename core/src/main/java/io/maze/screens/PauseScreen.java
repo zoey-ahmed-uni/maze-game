@@ -22,12 +22,9 @@ public class PauseScreen implements Screen{
     final Main game;
     final GameScreen gameScreen;
     private final ExtendViewport viewport;
-    Texture resumeButtonActive;
-    Texture resumeButtonInactive;
-    Texture exitButtonActive;
-    Texture exitButtonInactive;
-    Texture settingsButtonActive;
-    Texture settingsButtonInactive;
+    Texture resumeButtonActive, resumeButtonInactive;
+    Texture exitButtonActive, exitButtonInactive;
+    Texture settingsButtonActive, settingsButtonInactive;
 
     /**
      * @param game passed in every time a new screen is created in order to access the spritebatch
@@ -65,20 +62,15 @@ public class PauseScreen implements Screen{
 
         game.getBatch().begin();
 
-        final float exitButtonWidth = 5f;
-        final float exitButtonHeight = 2f;
+        final float exitButtonWidth = 5f, exitButtonHeight = 2f;
         final float exitButtonX = viewport.getWorldWidth() / 2f - exitButtonWidth / 2f;
         final float exitButtonY = 1f;
 
-
-        final float settingsButtonWidth = 5f;
-        final float settingsButtonHeight = 2f;
+        final float settingsButtonWidth = 5f, settingsButtonHeight = 2f;
         final float settingsButtonX = viewport.getWorldWidth() / 2f - settingsButtonWidth / 2f;
         final float settingsButtonY = 5f;
 
-
-        final float resumeButtonWidth = 5f;
-        final float resumeButtonHeight = 2f;
+        final float resumeButtonWidth = 5f, resumeButtonHeight = 2f;
         final float resumeButtonX = viewport.getWorldWidth() / 2f - resumeButtonWidth / 2f;
         final float resumeButtonY = 9f;
 

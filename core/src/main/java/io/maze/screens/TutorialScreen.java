@@ -21,16 +21,9 @@ public class TutorialScreen implements Screen{
     private final MainMenu menu;
     private final BitmapFont font;
     private final ExtendViewport viewport;
-    Texture escKey;
-    Texture wKey;
-    Texture aKey;
-    Texture sKey;
-    Texture dKey;
-    Texture eKey;
-    Texture backInactive;
-    Texture backActive;
-    Texture playButtonActive;
-    Texture playButtonInactive;
+    
+    Texture escKey, wKey, aKey, sKey, dKey, eKey;
+    Texture backInactive, backActive, playButtonActive, playButtonInactive;
 
     /* The game is passed in every time we create a new screen,
      * in order to access the spritebatch.
@@ -72,45 +65,20 @@ public class TutorialScreen implements Screen{
 
         game.getBatch().begin();
 
-        final float backButtonWidth = 5f;
-        final float backButtonHeight = 2f;
-        final float backButtonX = 1f;
-        final float backButtonY = 1f;
+        // Setting the heights, widths and positions of the various buttons
+        final float backButtonWidth = 5f, backButtonHeight = 2f, backButtonX = 1f, backButtonY = 1f;
 
-        final float playButtonWidth = 5f;
-        final float playButtonHeight = 2f;
+        final float playButtonWidth = 5f, playButtonHeight = 2f;
         final float playButtonX = viewport.getWorldWidth() - 6f;
         final float playButtonY = 1f;
 
-        final float wWidth = 1f;
-        final float wHeight = 1f;
-        final float wButtonX = 2f;
-        final float wButtonY = 9f;
-
-        final float aWidth = 1f;
-        final float aHeight = 1f;
-        final float aButtonX = 1f;
-        final float aButtonY = 8f;
-
-        final float sWidth = 1f;
-        final float sHeight = 1f;
-        final float sButtonX = 2f;
-        final float sButtonY = 8f;
-
-        final float dWidth = 1f;
-        final float dHeight = 1f;
-        final float dButtonX = 3f;
-        final float dButtonY = 8f;
-
-        final float eWidth = 1f;
-        final float eHeight = 1f;
-        final float eButtonX = 2f;
-        final float eButtonY = 6f;
-
-        final float escWidth = 1f;
-        final float escHeight = 1f;
-        final float escButtonX = 2f;
-        final float escButtonY = 4f;
+    
+        final float wWidth = 1f, wHeight = 1f, wButtonX = 2f, wButtonY = 9f;
+        final float aWidth = 1f, aHeight = 1f, aButtonX = 1f, aButtonY = 8f;
+        final float sWidth = 1f, sHeight = 1f, sButtonX = 2f, sButtonY = 8f;
+        final float dWidth = 1f, dHeight = 1f, dButtonX = 3f, dButtonY = 8f;
+        final float eWidth = 1f, eHeight = 1f, eButtonX = 2f, eButtonY = 6f;
+        final float escWidth = 1f, escHeight = 1f, escButtonX = 2f, escButtonY = 4f;
 
 
         // Convert world coordinates to screen coordinates
