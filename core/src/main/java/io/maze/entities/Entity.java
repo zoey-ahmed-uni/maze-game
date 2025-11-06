@@ -53,9 +53,7 @@ public abstract class Entity {
         deltaY = 0f;
     }
 
-    /**
-     * Updates the x and y coordinates of each sprite which represents the entity (left, right etc.).
-     */
+    /** Updates the x and y coordinates of each sprite which represents the entity (left, right etc.). */
     public void updateSpritePositions(){
         frontSprite.setPosition(x, y);
         backSprite.setPosition(x, y);
@@ -63,83 +61,47 @@ public abstract class Entity {
         rightSprite.setPosition(x, y);
     }
 
-    /**
-     * Gets x coordinate of the Entity's center.
-     *
-     * @return the x coordinate of the center
-     */
+    /** {@return the x coordinate of the center} */
     public float getCenterX(){
         return activeSprite.getX() + activeSprite.getWidth() / 2f;
     }
 
-    /**
-     * Gets y coordinate of the Entity's center.
-     *
-     * @return the y coordinate of the center
-     */
+    /** {@return the y coordinate of the center} */
     public float getCenterY(){
         return activeSprite.getY() + activeSprite.getHeight() / 2f;
     }
 
-    /**
-     * Gets x coordinate of the Entity.
-     *
-     * @return the x coordinate
-     */
+    /** {@return the x coordinate of the Entity} */
     public float getX() {
         return x;
     }
 
-    /**
-     * Sets the Entity's x coordinate.
-     *
-     * @param x the new desired x coordinate
-     */
+    /** @param x the new x coordinate */
     public void setX(float x) {
         this.x = x;
     }
 
-    /**
-     * Gets the Entity's y coordinate.
-     *
-     * @return the y coordinate
-     */
+    /** {@return the y coordinate} */
     public float getY() {
         return y;
     }
 
-    /**
-     * Sets the Entity's y coordinate.
-     *
-     * @param y the new desired y coordinate
-     */
+    /** @param y the new y coordinate */
     public void setY(float y) {
         this.y = y;
     }
 
-    /**
-     * Sets the Entity's speed.
-     *
-     * @param speed the new speed
-     */
+    /** @param speed the new speed */
     public void setSpeed(float speed) {
         this.speed = speed;
     }
 
-    /**
-     * Gets the speed of the Entity.
-     *
-     * @return the speed
-     */
+    /** {@return the speed} */
     public float getSpeed() {
         return speed;
     }
 
-    /**
-     * Gets the Sprite of the entity.
-     *
-     * @return the sprite.
-     */
+    /** {@return the sprite} */
     public Sprite getActiveSprite() {
         return activeSprite;
     }
@@ -153,74 +115,42 @@ public abstract class Entity {
         this.activeSprite = activeSprite;
     }
 
-    /**
-     * Gets front sprite of the Entity.
-     *
-     * @return the front sprite
-     */
+    /** {@return the front sprite} */
     public Sprite getFrontSprite() {
         return frontSprite;
     }
 
-    /**
-     * Gets the back sprite of the Entity.
-     *
-     * @return the back sprite
-     */
+    /** {@return the back sprite} */
     public Sprite getBackSprite() {
         return backSprite;
     }
 
-    /**
-     * Gets the left sprite of the entity.
-     *
-     * @return the left sprite
-     */
+    /** {@return the left sprite} */
     public Sprite getLeftSprite() {
         return leftSprite;
     }
 
-    /**
-     * Gets the right sprite of the Entity.
-     *
-     * @return the right sprite
-     */
+    /** {@return the right sprite} */
     public Sprite getRightSprite() {
         return rightSprite;
     }
 
-    /**
-     * Gets the Entity's change in x.
-     *
-     * @return the change in x
-     */
+    /** {@return the change in x} */
     public float getDeltaX() {
         return deltaX;
     }
 
-    /**
-     * Sets the Entity's change in x.
-     *
-     * @param deltaX the new change in x
-     */
+    /** @param deltaX the new change in x */
     public void setDeltaX(float deltaX) {
         this.deltaX = deltaX;
     }
 
-    /**
-     * Gets the Entity's change in y.
-     *
-     * @return the change in y
-     */
+    /** {@return the change in y} */
     public float getDeltaY() {
         return deltaY;
     }
 
-    /**
-     * Sets the Entity's change in y.
-     *
-     * @param deltaY the new change in y
-     */
+    /** @param deltaY the new change in y */
     public void setDeltaY(float deltaY) {
         this.deltaY = deltaY;
     }
