@@ -23,10 +23,8 @@ public class GameOverScreen implements Screen{
     private final Main game;
     private final BitmapFont font;
     private final ExtendViewport viewport;
-    Texture newGameInactive;
-    Texture newGameActive;
-    Texture exitActive;
-    Texture exitInactive;
+    Texture newGameInactive, newGameActive;
+    Texture exitInactive, exitActive;
 
     /**
      * Instantiates a new Game Over Screen.

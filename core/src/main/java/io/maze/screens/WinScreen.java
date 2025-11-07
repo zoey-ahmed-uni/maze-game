@@ -24,10 +24,8 @@ public class WinScreen implements Screen{
     private final GameScreen gameScreen;
     private final BitmapFont font;
     private final ExtendViewport viewport;
-    Texture newGameInactive;
-    Texture newGameActive;
-    Texture exitActive;
-    Texture exitInactive;
+    Texture newGameInactive, newGameActive;
+    Texture exitInactive, exitActive;
 
     /**
      * Instantiates a new Win Screen.
