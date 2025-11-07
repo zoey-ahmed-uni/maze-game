@@ -1,20 +1,31 @@
 package io.maze.screens;
 
+import com.badlogic.gdx.maps.MapObjects;
 import io.maze.core.CollisionChecker;
+import io.maze.entities.Guard;
 import io.maze.entities.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.maze.core.Main;
+import io.maze.objects.Exam;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Represents the game screen of the application.
+ *
+ * @see com.badlogic.gdx.Screen Screen
+ */
 public class GameScreen implements Screen {
     final Main game;
 
@@ -26,30 +37,112 @@ public class GameScreen implements Screen {
 
     private final Player player;
 
-    private final MapObjects mapObjects;
+    private final MapObjects collisionObjects, objectObjects, checkpointObjects, finishObjects;
+
+    private ArrayList<Guard> guards;
+
+    private final ArrayList<Exam> exams;
+    private List<String> completedExamNames;
+    private Boolean isPaused = false;
+
+    private int score;
+
+    private final FitViewport hudViewport;
+    private final OrthographicCamera hudCamera;
+    private final BitmapFont font;
+    private float timeLeft;
+
+    /**
+     * Instantiates a new Game Screen.
+     *
+     * @param game the game is passed in every time we create a new
+     *             screen in order to access the spritebatch
+     *
+     */
 
     public GameScreen(final Main game){
         this.game = game;
 
-        String mapFilePath = "map/testTileMap.tmx";
-        this.map = new TmxMapLoader().load(mapFilePath);
+        this.map = new TmxMapLoader().load("map/map.tmx");
         this.mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-        this.mapObjects = map.getLayers().get("Collision").getObjects();
+
+        this.collisionObjects = map.getLayers().get("collisions").getObjects();
+        this.objectObjects = map.getLayers().get("objects").getObjects();
+        this.checkpointObjects = map.getLayers().get("checkpoints").getObjects();
+        this.finishObjects = map.getLayers().get("finish").getObjects();
 
         camera = new OrthographicCamera();
+        camera.zoom = 0.5f;
         camera.setToOrtho(false, 16, 9);
 
         viewport = new FitViewport(16,9,camera);
 
         player = new Player();
 
-        player.setX(viewport.getWorldWidth() / 2f - 1 / 2f);
-        player.setY(viewport.getWorldHeight() / 2f - 1 / 2f);
+        guards = new ArrayList<>() {
+            {
+                add(new Guard(14.5f, 28.5f, false, 0.5f));
+                add(new Guard(13f, 28f, false, 0.5f));
+                add(new Guard(10f, 27.5f, false, 0.5f));
+                add(new Guard(8.5f, 27f, false, 0.5f));
+                add(new Guard(14.5f, 24.5f, false, 3f));
+                add(new Guard(12.5f, 23f, false, 3f));
+                add(new Guard(10.5f, 21.5f, false, 3f));
+                add(new Guard(11f, 21.5f, true, 3f));
+                add(new Guard(4f, 16.5f, true, 5f));
+                add(new Guard(4f, 16f, false, 1f));
+                add(new Guard(5f, 16.5f, false, 1f));
+                add(new Guard(6.5f, 11f, false, 1.5f));
+                add(new Guard(9f, 8.5f, true, 4f));
+                add(new Guard(14f, 3f, false, 3f));
+                add(new Guard(17f, 4f, false, 3f));
+            }
+        };
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
+        exams = new ArrayList<>(){
+            {
+                add(new Exam("exam1"));
+                add(new Exam("exam2"));
+                add(new Exam("exam3"));
+                add(new Exam("exam4"));
+                add(new Exam("exam5"));
+                add(new Exam("exam6"));
+                add(new Exam("exam7"));
+                add(new Exam("exam8"));
+                add(new Exam("exam9"));
+                add(new Exam("exam10"));
+            }
+        };
+
+        for (Exam exam: exams) {
+            exam.setPosition(objectObjects);
+        }
+
+        completedExamNames = new ArrayList<>();
+
+        score = 0;
+
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, 16, 9);
+        hudViewport = new FitViewport(16,9,hudCamera);
+        font = new BitmapFont();
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(0.03f);
+
+        timeLeft = 300f;
+    }
+
+    public void unPause(){
+        this.isPaused = false;
+    }
+
+    @Override
+    public void pause(){
+        this.isPaused = true;
+    }
+
+    public int getScore(){
+        return this.score;
     }
 
     @Override
@@ -57,18 +150,16 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Sets the screen's new width and height.
+     *
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
-    }
-
-    @Override
-    public void pause() {
-
+        hudViewport.update(width, height, true);
     }
 
     @Override
@@ -81,13 +172,27 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
+        // Press ESC to pause
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            this.pause();
+            game.setScreen(new PauseScreen(game, this)); // pass current screen
+            return; // don’t update game logic this frame
+        }
+
         input();
         logic();
         draw();
     }
-
+    /**
+     * Determines what actions to perform on a given input from the player.
+     * <p>
+     * Mainly handles player movement, but additionally interaction with {@link io.maze.objects.Exam exams}.
+     */
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
@@ -98,7 +203,7 @@ public class GameScreen implements Screen {
             player.setDeltaY(player.getSpeed() * delta);
             player.setDeltaX(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateY(player.getDeltaY());
             }
         }
@@ -108,7 +213,7 @@ public class GameScreen implements Screen {
             player.setDeltaY(-player.getSpeed() * delta);
             player.setDeltaX(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateY(player.getDeltaY());
             }
         }
@@ -118,34 +223,107 @@ public class GameScreen implements Screen {
             player.setDeltaX(-player.getSpeed() * delta);
             player.setDeltaY(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateX(player.getDeltaX());
             }
 
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.setActiveSprite(player.getRightSprite());
             player.setDeltaX(player.getSpeed() * delta);
             player.setDeltaY(0);
 
-            if (!CollisionChecker.isColliding(player, mapObjects)) {
+            if (!CollisionChecker.isColliding(player, collisionObjects, completedExamNames)) {
                 player.getActiveSprite().translateX(player.getDeltaX());
             }
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            for (Exam exam: exams) {
+                if (CollisionChecker.isColliding(player, exam) && !exam.isCompleted()) {
+                    exam.setCompleted();
+                    score+=100;
+                    completedExamNames.add(exam.getName());
+                }
+            }
+        }
+    }
+    /**
+     * Handles the various events that occur throughout the game such as:
+     * <ul>
+     * <li> checkpoints
+     * <li> guard movement
+     * <li> timer
+     * <li> game completion
+     * <li> game failure
+     * </ul>
+     */
+    private void logic() {
+        float delta = Gdx.graphics.getDeltaTime();
+
+        if (CollisionChecker.isColliding(player, checkpointObjects)) {
+            player.setSpawnPoint(player.getX(), player.getY());
+        }
+
+        if (CollisionChecker.isColliding(player, finishObjects)) {
+            score += (int)timeLeft;
+            game.setScreen(new WinScreen(game, this));
+        }
+
+        for (Guard guard : guards) {
+            if (CollisionChecker.isColliding(player, guard)) {
+                player.respawn();
+                score-=10;
+            }
+        }
+        // NPC movement
+        // true if moving up, false if moving down
+        for (Guard guard : guards) {
+            if (guard.isMovingHorizontally()) {
+                if (guard.getSpeed() < 0) {
+                    guard.setActiveSprite(guard.getLeftSprite());
+                } else {
+                    guard.setActiveSprite(guard.getRightSprite());
+                }
+
+                guard.setDeltaX(guard.getSpeed() * delta);
+                guard.setDeltaY(0);
+                guard.getActiveSprite().translateX(guard.getDeltaX());
+
+            } else {
+                if (guard.getSpeed() < 0) {
+                    guard.setActiveSprite(guard.getFrontSprite());
+                } else {
+                    guard.setActiveSprite(guard.getBackSprite());
+                }
+
+                guard.setDeltaY(guard.getSpeed() * delta);
+                guard.setDeltaX(0);
+                guard.getActiveSprite().translateY(guard.getDeltaY());
+
+            }
+            if (CollisionChecker.isColliding(guard, collisionObjects)){
+                guard.setSpeed(-guard.getSpeed());
+            }
+        }
+
+        if (timeLeft > 0) {
+            timeLeft -= delta;
+        }
+        else {
+            game.setScreen(new GameOverScreen(game));
+        }
     }
 
-    private void logic() {}
-
+    /** Draws map, text, characters and objects to screen. Additionally, updates camera movement.*/
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        float playerCenterX = player.getActiveSprite().getX() + player.getActiveSprite().getWidth() / 2f;
-        float playerCenterY = player.getActiveSprite().getY() + player.getActiveSprite().getHeight() / 2f;
-
-        viewport.getCamera().position.set(playerCenterX, playerCenterY, 0);
+        viewport.getCamera().position.set(player.getCenterX(), player.getCenterY(), 0);
         viewport.getCamera().update();
 
         viewport.apply();
@@ -156,22 +334,42 @@ public class GameScreen implements Screen {
 
         game.getBatch().begin();
 
-        player.getFrontSprite().setPosition(player.getX(), player.getY());
-        player.getBackSprite().setPosition(player.getX(), player.getY());
-        player.getLeftSprite().setPosition(player.getX(), player.getY());
-        player.getRightSprite().setPosition(player.getX(), player.getY());
+        player.updateSpritePositions();
 
         player.getActiveSprite().draw(game.getBatch());
 
+        for (Guard guard : guards) {
+            guard.setX(guard.getActiveSprite().getX());
+            guard.setY(guard.getActiveSprite().getY());
+            guard.updateSpritePositions();
+            guard.getActiveSprite().draw(game.getBatch());
+        }
+
+        for (Exam exam: exams){
+            exam.getSprite().draw(game.getBatch());
+        }
+
+        game.getBatch().end();
+
+        hudViewport.apply();
+        game.getBatch().setProjectionMatrix(hudCamera.combined);
+        game.getBatch().begin();
+        font.draw(game.getBatch(), "Score: " + score, 1f, 8f);
+        font.draw(game.getBatch(), "Time Left: " + (int)timeLeft + "s", 12f, 8f);
         game.getBatch().end();
     }
 
     @Override
     public void dispose() {
-        game.getBatch().dispose();
         player.dispose();
-
         map.dispose();
         mapRenderer.dispose();
+        for (Guard guard : guards) {
+            guard.dispose();
+        }
+        for (Exam exam: exams){
+            exam.dispose();
+        }
+        font.dispose();
     }
 }

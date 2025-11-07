@@ -10,31 +10,32 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.maze.core.Main;
 
 /**
- * The MainMenu screen contains attributes for all the button images as well as its own viewport.
- * <p>
- * As a general rule, every screen should have its own viewport.
+ * The PauseScreen contains attributes for all the button images as well as its
+ * own viewport.
+ *
+ * As a general rule, every screen should have its own viewport
+ *
+ * @see MainMenu
  */
-public class MainMenu implements Screen{
+public class PauseScreen implements Screen{
 
     final Main game;
+    final GameScreen gameScreen;
     private final ExtendViewport viewport;
-
-    Texture playButtonActive, playButtonInactive;
+    Texture resumeButtonActive, resumeButtonInactive;
     Texture exitButtonActive, exitButtonInactive;
     Texture settingsButtonActive, settingsButtonInactive;
 
     /**
-     * Instantiates a new Main menu.
-     *
-     * @param game the game is passed in every time we create a new
-     *             screen in order to access the spritebatch
-     *
+     * @param game passed in every time a new screen is created in order to access the spritebatch
+     * @param gameScreen allows us to return to the game in its original state after a pause
      */
-    public MainMenu(final Main game){
+    public PauseScreen(final Main game, final GameScreen gameScreen){
         this.game = game;
+        this.gameScreen = gameScreen;
         this.viewport = new ExtendViewport(16,9);
-        this.playButtonActive = new Texture("menu/playActive.png");
-        this.playButtonInactive = new Texture("menu/playInactive.png");
+        this.resumeButtonActive = new Texture("menu/resumeActive.png");
+        this.resumeButtonInactive = new Texture("menu/resumeInactive.png");
         this.exitButtonActive = new Texture("menu/exitActive.png");
         this.exitButtonInactive = new Texture("menu/exitInactive.png");
         this.settingsButtonActive = new Texture("menu/settingsActive.png");
@@ -45,7 +46,13 @@ public class MainMenu implements Screen{
     public void show() {
 
     }
-    /** Called when the screen renders itself, handles the drawing of all the menu buttons. */
+    /**
+     * Called when the screen renders itself.
+     * <p>
+     * Handles the drawing of all the menu buttons
+     *
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -59,15 +66,13 @@ public class MainMenu implements Screen{
         final float exitButtonX = viewport.getWorldWidth() / 2f - exitButtonWidth / 2f;
         final float exitButtonY = 1f;
 
-
         final float settingsButtonWidth = 5f, settingsButtonHeight = 2f;
         final float settingsButtonX = viewport.getWorldWidth() / 2f - settingsButtonWidth / 2f;
         final float settingsButtonY = 5f;
 
-
-        final float playButtonWidth = 5f, playButtonHeight = 2f;
-        final float playButtonX = viewport.getWorldWidth() / 2f - playButtonWidth / 2f;
-        final float playButtonY = 9f;
+        final float resumeButtonWidth = 5f, resumeButtonHeight = 2f;
+        final float resumeButtonX = viewport.getWorldWidth() / 2f - resumeButtonWidth / 2f;
+        final float resumeButtonY = 9f;
 
         //Convert world coordinates to screen coordinates
         Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -77,10 +82,10 @@ public class MainMenu implements Screen{
         //boolean values that turn True if the user is hovering over the specified button
         //each one takes the mouse position and compares it to the place on the screen where the
         //button is drawn
-        boolean isHoveringPlay = touchPos.x < playButtonX + playButtonWidth &&
-            touchPos.x > playButtonX &&
-            touchPos.y < playButtonY + playButtonHeight &&
-            touchPos.y > playButtonY;
+        boolean isHoveringResume = touchPos.x < resumeButtonX + resumeButtonWidth &&
+            touchPos.x > resumeButtonX &&
+            touchPos.y < resumeButtonY + resumeButtonHeight &&
+            touchPos.y > resumeButtonY;
 
         boolean isHoveringSettings = touchPos.x < settingsButtonX + settingsButtonWidth &&
             touchPos.x > settingsButtonX &&
@@ -92,55 +97,38 @@ public class MainMenu implements Screen{
             touchPos.y < exitButtonY + exitButtonHeight &&
             touchPos.y > exitButtonY;
 
-        //if the user is not hovering play:
-        if (!isHoveringPlay){
-            //draw the inactive play button
-            game.getBatch().draw(
-                playButtonInactive, playButtonX, playButtonY,
-                playButtonWidth, playButtonHeight
-            );
+        //if the user is not hovering resume:
+        if (!isHoveringResume){
+            //draw the inactive resume button
+            game.getBatch().draw(resumeButtonInactive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
         }
         //otherwise:
         else{
-            //draw the active play button
-            game.getBatch().draw(
-                playButtonActive, playButtonX, playButtonY,
-                playButtonWidth, playButtonHeight
-            );
+            //draw the active resume button
+            game.getBatch().draw(resumeButtonActive,resumeButtonX,resumeButtonY,resumeButtonWidth,resumeButtonHeight);
         }
 
         if (!isHoveringSettings){
-            game.getBatch().draw(
-                settingsButtonInactive, settingsButtonX, settingsButtonY,
-                settingsButtonWidth, settingsButtonHeight
-            );
+            game.getBatch().draw(settingsButtonInactive,settingsButtonX,settingsButtonY,settingsButtonWidth,settingsButtonHeight);
         }
         else{
-            game.getBatch().draw(
-                settingsButtonActive, settingsButtonX, settingsButtonY,
-                settingsButtonWidth, settingsButtonHeight
-            );
+            game.getBatch().draw(settingsButtonActive,settingsButtonX,settingsButtonY,settingsButtonWidth,settingsButtonHeight);
         }
 
         if (!isHoveringExit){
-            game.getBatch().draw(
-                exitButtonInactive, exitButtonX, exitButtonY,
-                exitButtonWidth,exitButtonHeight
-            );
+            game.getBatch().draw(exitButtonInactive,exitButtonX,exitButtonY,exitButtonWidth,exitButtonHeight);
         }
         else{
-            game.getBatch().draw(
-                exitButtonActive, exitButtonX, exitButtonY,
-                exitButtonWidth, exitButtonHeight
-            );
+            game.getBatch().draw(exitButtonActive,exitButtonX,exitButtonY,exitButtonWidth,exitButtonHeight);
         }
 
         //if the user clicks:
         if (Gdx.input.justTouched()) {
-            //on the play button
-            if (isHoveringPlay) {
-                //change the screen to the game
-                game.setScreen(new TutorialScreen(game,this));
+            //on the resume button
+            if (isHoveringResume) {
+                //change the screen back to the game
+                game.setScreen(gameScreen);
+                gameScreen.unPause();
                 dispose();
             }
             //on the settings button
@@ -149,21 +137,26 @@ public class MainMenu implements Screen{
             }
             //on the exit button
             else if (isHoveringExit) {
-                //exit the application
-                Gdx.app.exit();
+                //go back to the Main Menu
+                game.setScreen(new MainMenu(game));
             }
         }
         game.getBatch().end();
     }
 
-    /** Scales the application according to the correct aspect ratio when it is resized. */
+    /**
+     * Called whenever the application is resized.
+     * <p>
+     * Updates how the viewport scales with screen pixels to keep the aspect ratio consistent.
+     *
+     * @param h height
+     * @param w width
+     * */
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int h, int w) {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set the camera centrally
-        float worldCenterX = viewport.getWorldWidth() / 2f;
-        float worldCenterY = viewport.getWorldHeight() / 2f;
-        viewport.getCamera().position.set(worldCenterX, worldCenterY, 0);
+        viewport.getCamera().position.set(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f, 0);
         viewport.getCamera().update();
     }
 
