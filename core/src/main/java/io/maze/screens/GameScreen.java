@@ -38,14 +38,16 @@ public class GameScreen implements Screen {
     private final Player player;
 
     private final MapObjects collisionObjects, objectObjects, checkpointObjects, finishObjects;
+    private List<String> reachedCheckpoints;
 
     private ArrayList<Guard> guards;
 
     private final ArrayList<Exam> exams;
     private List<String> completedExamNames;
+
     private Boolean isPaused = false;
 
-    private int score;
+    private int score, positiveEvents, negativeEvents, hiddenEvents;
 
     private final FitViewport hudViewport;
     private final OrthographicCamera hudCamera;
@@ -121,6 +123,9 @@ public class GameScreen implements Screen {
         completedExamNames = new ArrayList<>();
 
         score = 0;
+        positiveEvents = 0;
+        negativeEvents = 0;
+        hiddenEvents = 0;
 
         hudCamera = new OrthographicCamera();
         hudCamera.setToOrtho(false, 16, 9);
@@ -245,6 +250,7 @@ public class GameScreen implements Screen {
                     exam.setCompleted();
                     score+=100;
                     completedExamNames.add(exam.getName());
+                    positiveEvents++;
                 }
             }
         }
@@ -264,6 +270,7 @@ public class GameScreen implements Screen {
 
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
             player.setSpawnPoint(player.getX(), player.getY());
+            hiddenEvents++;
         }
 
         if (CollisionChecker.isColliding(player, finishObjects)) {
@@ -275,6 +282,7 @@ public class GameScreen implements Screen {
             if (CollisionChecker.isColliding(player, guard)) {
                 player.respawn();
                 score-=10;
+                negativeEvents++;
             }
         }
         // NPC movement
@@ -356,6 +364,9 @@ public class GameScreen implements Screen {
         game.getBatch().begin();
         font.draw(game.getBatch(), "Score: " + score, 1f, 8f);
         font.draw(game.getBatch(), "Time Left: " + (int)timeLeft + "s", 12f, 8f);
+        font.draw(game.getBatch(),  "Positive Events: " + (positiveEvents + ""), 1f, 7.5f);
+        font.draw(game.getBatch(),  "Negative Events: " + (negativeEvents + ""), 1f, 7f);
+        font.draw(game.getBatch(),  "Hidden Events: " + (hiddenEvents + ""), 1f, 6.5f);
         game.getBatch().end();
     }
 
