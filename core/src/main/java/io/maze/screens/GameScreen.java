@@ -362,11 +362,10 @@ public class GameScreen implements Screen {
         hudViewport.apply();
         game.getBatch().setProjectionMatrix(hudCamera.combined);
         game.getBatch().begin();
-        font.draw(game.getBatch(), "Score: " + score, 1f, 8f);
         font.draw(game.getBatch(), "Time Left: " + (int)timeLeft + "s", 12f, 8f);
-        font.draw(game.getBatch(),  "Positive Events: " + (positiveEvents + ""), 1f, 7.5f);
-        font.draw(game.getBatch(),  "Negative Events: " + (negativeEvents + ""), 1f, 7f);
-        font.draw(game.getBatch(),  "Hidden Events: " + (hiddenEvents + ""), 1f, 6.5f);
+        font.draw(game.getBatch(),  "Positive Events: " + (positiveEvents + ""), 1f, 8f);
+        font.draw(game.getBatch(),  "Negative Events: " + (negativeEvents + ""), 1f, 7.5f);
+        font.draw(game.getBatch(),  "Hidden Events: " + (hiddenEvents + ""), 1f, 7f);
         game.getBatch().end();
     }
 
