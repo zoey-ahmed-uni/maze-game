@@ -182,6 +182,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        delta = Math.min(delta, 1 / 30f);
         // Press ESC to pause
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             this.pause();
@@ -189,8 +190,8 @@ public class GameScreen implements Screen {
             return; // don’t update game logic this frame
         }
 
-        input();
-        logic();
+        input(delta);
+        logic(delta);
         draw();
     }
     /**
@@ -198,8 +199,7 @@ public class GameScreen implements Screen {
      * <p>
      * Mainly handles player movement, but additionally interaction with {@link io.maze.objects.Exam exams}.
      */
-    private void input() {
-        float delta = Gdx.graphics.getDeltaTime();
+    private void input(float delta) {
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             // Set the player's velocity
@@ -265,8 +265,7 @@ public class GameScreen implements Screen {
      * <li> game failure
      * </ul>
      */
-    private void logic() {
-        float delta = Gdx.graphics.getDeltaTime();
+    private void logic(float delta) {
 
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
             player.setSpawnPoint(player.getX(), player.getY());
