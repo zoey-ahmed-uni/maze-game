@@ -15,6 +15,7 @@ public class Player extends Entity {
             "player/left.png"
         );
 
+        //update scale for the 50x50 map
         this.setX(14.5f);
         this.setY(14f);
         updateSpritePositions();
