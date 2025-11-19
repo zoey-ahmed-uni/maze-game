@@ -1,25 +1,26 @@
 package io.maze.screens;
 
-import com.badlogic.gdx.maps.MapObjects;
-import io.maze.core.CollisionChecker;
-import io.maze.entities.Guard;
-import io.maze.entities.Player;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import io.maze.core.Main;
-import io.maze.objects.Exam;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.maze.core.CollisionChecker;
+import io.maze.core.Main;
+import io.maze.entities.Guard;
+import io.maze.entities.Player;
+import io.maze.objects.Exam;
 
 /**
  * Represents the game screen of the application.
@@ -81,23 +82,25 @@ public class GameScreen implements Screen {
 
         player = new Player();
 
+        //new scale factor to fit the 50x50 map instead of the old 30x30
+        //scale formula = old x/y x (50/30)
         guards = new ArrayList<>() {
             {
-                add(new Guard(14.5f, 28.5f, false, 0.5f));
-                add(new Guard(13f, 28f, false, 0.5f));
-                add(new Guard(10f, 27.5f, false, 0.5f));
-                add(new Guard(8.5f, 27f, false, 0.5f));
-                add(new Guard(14.5f, 24.5f, false, 3f));
-                add(new Guard(12.5f, 23f, false, 3f));
-                add(new Guard(10.5f, 21.5f, false, 3f));
-                add(new Guard(11f, 21.5f, true, 3f));
-                add(new Guard(4f, 16.5f, true, 5f));
-                add(new Guard(4f, 16f, false, 1f));
-                add(new Guard(5f, 16.5f, false, 1f));
-                add(new Guard(6.5f, 11f, false, 1.5f));
-                add(new Guard(9f, 8.5f, true, 4f));
-                add(new Guard(14f, 3f, false, 3f));
-                add(new Guard(17f, 4f, false, 3f));
+                add(new Guard(24.17f, 47.5f, false, 0.5f));
+                add(new Guard(21.67f, 46.6f, false, 0.5f));
+                add(new Guard(16.67f, 45.83f, false, 0.5f));
+                add(new Guard(14.17f, 45f, false, 0.5f));
+                add(new Guard(24.17f, 40.83f, false, 3f));
+                add(new Guard(20.83f, 38.33f, false, 3f));
+                add(new Guard(17.5f, 35.83f, false, 3f));
+                add(new Guard(18.33f, 35.83f, true, 3f));
+                add(new Guard(6.67f, 27.5f, true, 5f));
+                add(new Guard(6.67f, 26.67f, false, 1f));
+                add(new Guard(8.33f, 27.5f, false, 1f));
+                add(new Guard(10.83f, 18.33f, false, 1.5f));
+                add(new Guard(15f, 14.17f, true, 4f));
+                add(new Guard(23.33f, 5f, false, 3f));
+                add(new Guard(28.33f, 6.67f, false, 3f));
             }
         };
 
