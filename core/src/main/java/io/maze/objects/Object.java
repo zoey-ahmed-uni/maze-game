@@ -1,5 +1,6 @@
 package io.maze.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapObjects;
@@ -18,7 +19,7 @@ public abstract class Object {
 
     public Object(String name, String texturePath) {
         this.name = name;
-        this.texture = new Texture(texturePath);
+        this.texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
         this.sprite.setSize(1f, 1f);
     }

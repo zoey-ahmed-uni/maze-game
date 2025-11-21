@@ -1,25 +1,29 @@
 package io.maze.screens;
 
-import com.badlogic.gdx.maps.MapObjects;
-import io.maze.core.CollisionChecker;
-import io.maze.entities.Guard;
-import io.maze.entities.Player;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import io.maze.core.Main;
-import io.maze.objects.Exam;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.maze.core.CollisionChecker;
+import io.maze.core.Inventory;
+import io.maze.core.InventoryItem;
+import io.maze.core.Main;
+import io.maze.entities.Guard;
+import io.maze.entities.Player;
+import io.maze.objects.Exam;
+import io.maze.objects.Locker;
 
 /**
  * Represents the game screen of the application.
@@ -54,6 +58,14 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
     private float timeLeft;
 
+    private ArrayList<Locker> lockers;
+    private Inventory inventory;
+    private BitmapFont inventoryFont;
+
+    private float speedBoostTimer = 0f;
+    private boolean hasSpeedBoost = false;
+    private float origninalPlayerSpeed;
+
     /**
      * Instantiates a new Game Screen.
      *
@@ -72,6 +84,25 @@ public class GameScreen implements Screen {
         this.objectObjects = map.getLayers().get("objects").getObjects();
         this.checkpointObjects = map.getLayers().get("checkpoints").getObjects();
         this.finishObjects = map.getLayers().get("finish").getObjects();
+        
+        this.lockers = new ArrayList<>() {{
+            add(new Locker("locker1"));
+            add(new Locker("locker2"));
+            add(new Locker("locker3"));
+            add(new Locker("locker4"));
+            add(new Locker("locker5"));
+            add(new Locker("locker6"));
+            add(new Locker("locker7"));
+        }};
+
+        this.inventory = new Inventory(3);
+        this.inventoryFont = new BitmapFont();
+        this.inventoryFont.getData().setScale(0.03f);
+
+        //position lockers
+        for (Locker locker : lockers) {
+            locker.setPosition(objectObjects);
+        }
 
         camera = new OrthographicCamera();
         camera.zoom = 0.5f;
@@ -80,24 +111,29 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(16,9,camera);
 
         player = new Player();
+        this.origninalPlayerSpeed = player.getSpeed(); //set the player's base speed
 
         guards = new ArrayList<>() {
             {
-                add(new Guard(14.5f, 28.5f, false, 0.5f));
-                add(new Guard(13f, 28f, false, 0.5f));
-                add(new Guard(10f, 27.5f, false, 0.5f));
-                add(new Guard(8.5f, 27f, false, 0.5f));
-                add(new Guard(14.5f, 24.5f, false, 3f));
-                add(new Guard(12.5f, 23f, false, 3f));
-                add(new Guard(10.5f, 21.5f, false, 3f));
-                add(new Guard(11f, 21.5f, true, 3f));
-                add(new Guard(4f, 16.5f, true, 5f));
-                add(new Guard(4f, 16f, false, 1f));
-                add(new Guard(5f, 16.5f, false, 1f));
-                add(new Guard(6.5f, 11f, false, 1.5f));
-                add(new Guard(9f, 8.5f, true, 4f));
-                add(new Guard(14f, 3f, false, 3f));
-                add(new Guard(17f, 4f, false, 3f));
+                //(x, y, horixzontal, speed)
+                //rescale using * 1.5f which is 45/30 to fit the new 45x45 tiled map
+                //add(new Guard(14.5f *1.5f, 28.5f *1.5f, false, 0.5f));
+                add(new Guard(10f, 10f, false, 0.5f));
+
+                //add(new Guard(13f *1.5f, 28f *1.5f, false, 0.5f));
+                //add(new Guard(10f *1.5f, 27.5f *1.5f, false, 0.5f));
+                //add(new Guard(8.5f *1.5f, 27f *1.5f, false, 0.5f));
+                //add(new Guard(14.5f *1.5f, 24.5f *1.5f, false, 3f));
+                //add(new Guard(12.5f *1.5f, 23f *1.5f, false, 3f));
+                //add(new Guard(10.5f *1.5f, 21.5f *1.5f, false, 3f));
+                //add(new Guard(11f *1.5f, 21.5f *1.5f, true, 3f));
+                //add(new Guard(4f *1.5f, 16.5f *1.5f, true, 5f));
+                //add(new Guard(4f *1.5f, 16f *1.5f, false, 1f));
+                //add(new Guard(5f *1.5f, 16.5f *1.5f, false, 1f));
+                //add(new Guard(6.5f *1.5f, 11f *1.5f, false, 1.5f));
+                //add(new Guard(9f *1.5f, 8.5f *1.5f, true, 4f));
+                //add(new Guard(14f *1.5f, 3f *1.5f, false, 3f));
+                //add(new Guard(17f *1.5f, 4f *1.5f, false, 3f));
             }
         };
 
@@ -121,6 +157,7 @@ public class GameScreen implements Screen {
         }
 
         completedExamNames = new ArrayList<>();
+        completedExamNames.clear();
 
         score = 0;
         positiveEvents = 0;
@@ -244,6 +281,29 @@ public class GameScreen implements Screen {
             }
         }
 
+        //inventory item usage with the number keys 1-3
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+            int usedItem = inventory.useItem(0);
+            if (usedItem != InventoryItem.EMPTY) {
+                applyItemEffect(usedItem);
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+            int usedItem = inventory.useItem(1);
+            if (usedItem != InventoryItem.EMPTY) {
+                applyItemEffect(usedItem);
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
+            int usedItem = inventory.useItem(2);
+            if (usedItem != InventoryItem.EMPTY) {
+                applyItemEffect(usedItem);
+            }
+        }
+
+
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             for (Exam exam: exams) {
                 if (CollisionChecker.isColliding(player, exam) && !exam.isCompleted()) {
@@ -253,7 +313,24 @@ public class GameScreen implements Screen {
                     positiveEvents++;
                 }
             }
+            //handling locker interaction event
+            for (Locker locker: lockers) {
+                if (CollisionChecker.isColliding(player, locker) && !locker.isOpened()) {
+                    //if the locker hasn't already been opened and the player is colliding with it then gain an item in inventory
+                    int item = locker.open();
+                    if (item != InventoryItem.EMPTY){
+                        if (inventory.addItem(item)) {
+                            //add item to inventory
+                            System.out.println("Added item to inventory: " + item);
+                        } else {
+                            System.out.println("Inventory full!");
+                        }
+            
+                    }
+                }
+            }
         }
+
     }
     /**
      * Handles the various events that occur throughout the game such as:
@@ -266,6 +343,13 @@ public class GameScreen implements Screen {
      * </ul>
      */
     private void logic(float delta) {
+        //update speed boost timer
+        if (hasSpeedBoost) {
+            speedBoostTimer -= delta;
+            if (speedBoostTimer <= 0) {
+                player.setSpeed(origninalPlayerSpeed);
+            }
+        }
 
         if (CollisionChecker.isColliding(player, checkpointObjects)) {
             player.setSpawnPoint(player.getX(), player.getY());
@@ -327,6 +411,7 @@ public class GameScreen implements Screen {
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
 
+        //first draw the game world
         mapRenderer.setView(camera);
         mapRenderer.render();
 
@@ -358,13 +443,29 @@ public class GameScreen implements Screen {
 
         game.getBatch().end();
 
+        //draw HUD elements last (on top of everything else)
         hudViewport.apply();
         game.getBatch().setProjectionMatrix(hudCamera.combined);
         game.getBatch().begin();
-        font.draw(game.getBatch(), "Time Left: " + (int)timeLeft + "s", 12f, 8f);
+
+        font.draw(game.getBatch(), "Time Left: " + (int)timeLeft / 60 + ":" + (int)timeLeft % 60, 12f, 8f);
         font.draw(game.getBatch(),  "Positive Events: " + (positiveEvents + ""), 1f, 8f);
         font.draw(game.getBatch(),  "Negative Events: " + (negativeEvents + ""), 1f, 7.5f);
         font.draw(game.getBatch(),  "Hidden Events: " + (hiddenEvents + ""), 1f, 7f);
+
+        //draw inventory
+        for (int i = 0; i < inventory.getSlots().size(); i++) {
+            float xPos = 6.8f + i * 1f; //position each slot 1 unit apart
+            float slotSize = 0.8f; //the size of each inventory slot
+
+            //draw the white slot background first
+
+            //draw the item texture using the same size as the slot size to rescale it
+            game.getBatch().draw(inventory.getSlots().get(i).getTexture(), xPos, 1f, slotSize, slotSize);
+            
+            //draw slot numbers
+            inventoryFont.draw(game.getBatch(), String.valueOf(i+1), xPos + 0.1f, 1.7f);
+        }
         game.getBatch().end();
     }
 
@@ -380,5 +481,19 @@ public class GameScreen implements Screen {
             exam.dispose();
         }
         font.dispose();
+    }
+
+    private void applyItemEffect(int itemType) {
+        switch (itemType) {
+            case InventoryItem.APPLE:
+                //increase the player's speed temporarily
+                hasSpeedBoost = true;
+                speedBoostTimer = 10f; //speed boost for 10 seconds
+                player.setSpeed(player.getSpeed() + 2f);
+            case InventoryItem.COOKIE:
+                //EXAMPLE -> give the player some time back
+                timeLeft += 30f;
+                break;
+        }
     }
 }
