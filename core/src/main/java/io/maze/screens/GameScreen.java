@@ -17,13 +17,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import io.maze.core.CollisionChecker;
-import io.maze.core.Inventory;
-import io.maze.core.InventoryItem;
 import io.maze.core.Main;
 import io.maze.entities.Guard;
 import io.maze.entities.Player;
 import io.maze.objects.Exam;
-import io.maze.objects.Locker;
 
 /**
  * Represents the game screen of the application.
@@ -113,27 +110,25 @@ public class GameScreen implements Screen {
         player = new Player();
         this.origninalPlayerSpeed = player.getSpeed(); //set the player's base speed
 
+        //new scale factor to fit the 50x50 map instead of the old 30x30
+        //scale formula = old x/y x (50/30)
         guards = new ArrayList<>() {
             {
-                //(x, y, horixzontal, speed)
-                //rescale using * 1.5f which is 45/30 to fit the new 45x45 tiled map
-                //add(new Guard(14.5f *1.5f, 28.5f *1.5f, false, 0.5f));
-                add(new Guard(10f, 10f, false, 0.5f));
-
-                //add(new Guard(13f *1.5f, 28f *1.5f, false, 0.5f));
-                //add(new Guard(10f *1.5f, 27.5f *1.5f, false, 0.5f));
-                //add(new Guard(8.5f *1.5f, 27f *1.5f, false, 0.5f));
-                //add(new Guard(14.5f *1.5f, 24.5f *1.5f, false, 3f));
-                //add(new Guard(12.5f *1.5f, 23f *1.5f, false, 3f));
-                //add(new Guard(10.5f *1.5f, 21.5f *1.5f, false, 3f));
-                //add(new Guard(11f *1.5f, 21.5f *1.5f, true, 3f));
-                //add(new Guard(4f *1.5f, 16.5f *1.5f, true, 5f));
-                //add(new Guard(4f *1.5f, 16f *1.5f, false, 1f));
-                //add(new Guard(5f *1.5f, 16.5f *1.5f, false, 1f));
-                //add(new Guard(6.5f *1.5f, 11f *1.5f, false, 1.5f));
-                //add(new Guard(9f *1.5f, 8.5f *1.5f, true, 4f));
-                //add(new Guard(14f *1.5f, 3f *1.5f, false, 3f));
-                //add(new Guard(17f *1.5f, 4f *1.5f, false, 3f));
+                add(new Guard(24.17f, 47.5f, false, 0.5f));
+                add(new Guard(21.67f, 46.6f, false, 0.5f));
+                add(new Guard(16.67f, 45.83f, false, 0.5f));
+                add(new Guard(14.17f, 45f, false, 0.5f));
+                add(new Guard(24.17f, 40.83f, false, 3f));
+                add(new Guard(20.83f, 38.33f, false, 3f));
+                add(new Guard(17.5f, 35.83f, false, 3f));
+                add(new Guard(18.33f, 35.83f, true, 3f));
+                add(new Guard(6.67f, 27.5f, true, 5f));
+                add(new Guard(6.67f, 26.67f, false, 1f));
+                add(new Guard(8.33f, 27.5f, false, 1f));
+                add(new Guard(10.83f, 18.33f, false, 1.5f));
+                add(new Guard(15f, 14.17f, true, 4f));
+                add(new Guard(23.33f, 5f, false, 3f));
+                add(new Guard(28.33f, 6.67f, false, 3f));
             }
         };
 
