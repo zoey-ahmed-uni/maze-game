@@ -252,10 +252,6 @@
   <object id="60" name="exam3" x="282.041" y="63.2048" width="7.57592" height="58.6593"/>
   <object id="64" name="exam1" x="349.467" y="210.542" width="7.57592" height="50.0679"/>
   <object id="75" name="exam5" x="154.393" y="265.672" width="7.57592" height="50.0679"/>
-  <object id="85" name="exam7" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
-  <object id="86" name="exam8" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
-  <object id="87" name="exam9" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
-  <object id="88" name="exam10" x="314.033" y="386.526" width="7.57592" height="50.0679"/>
   <object id="67" name="exam4" x="96.1959" y="150.033" width="61.2156" height="8.74508"/>
   <object id="76" name="exam6" x="79.892" y="404.374" width="48.58" height="8.74508"/>
   <object id="69" name="exam2" x="417.162" y="259.985" width="61.2156" height="8.74508"/>
@@ -336,7 +332,7 @@
  <objectgroup id="5" name="objects" visible="0">
   <object id="62" name="exam3" x="98.2736" y="21.5794" width="22.7458" height="17.4968"/>
   <object id="63" name="exam1" x="369.65" y="292.29" width="22.7458" height="17.4968"/>
-  <object id="70" name="exam2" x="350.935" y="173.449" width="22.7458" height="17.4968"/>
+  <object id="70" name="exam2" x="385.435" y="169.449" width="22.7458" height="17.4968"/>
   <object id="65" name="exam4" x="36.1668" y="147.233" width="22.7458" height="17.4968"/>
   <object id="74" name="exam5" x="9.7178" y="332.008" width="22.7458" height="17.4968"/>
   <object id="77" name="exam6" x="43.956" y="427.386" width="22.7458" height="17.4968"/>
